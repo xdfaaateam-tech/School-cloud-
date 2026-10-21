@@ -13,180 +13,127 @@
     --success:#1db954; --danger:#ef4444; --warning:#f59e0b; --info:#3b82f6;
   }
   * { box-sizing:border-box; margin:0; padding:0; }
-  body {
-    font-family:'Segoe UI',Tahoma,sans-serif; background:var(--bg); color:var(--text);
-    min-height:100vh; overflow-x:hidden;
-  }
+  body { font-family:'Segoe UI',Tahoma,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
   .hidden { display:none !important; }
 
-  /* ===== LOGIN ===== */
-  #login-view {
-    min-height:100vh; display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%); padding:20px;
-  }
-  .login-card {
-    background:rgba(24,24,24,.95); border:1px solid var(--border); border-radius:16px;
-    padding:40px 32px; width:100%; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,.5);
-    animation:slideUp .4s ease;
-  }
-  @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  .login-card .logo {
-    display:flex; align-items:center; justify-content:center; margin-bottom:20px;
-  }
+  /* LOGIN */
+  #login-view { min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460); padding:20px; }
+  .login-card { background:rgba(24,24,24,.95); border:1px solid var(--border); border-radius:16px;
+    padding:40px 32px; width:100%; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,.5); }
+  .login-card .logo { display:flex; justify-content:center; margin-bottom:20px; }
   .login-card .logo img { max-width:80px; max-height:80px; border-radius:12px; }
   .login-card h1 { text-align:center; font-size:22px; margin-bottom:6px; }
   .login-card .sub { text-align:center; color:var(--sec); font-size:13px; margin-bottom:24px; }
   label { display:block; font-size:12px; color:var(--sec); margin-bottom:6px; font-weight:600; }
-  input, textarea, select {
-    width:100%; padding:11px 14px; background:var(--input); border:1px solid var(--border);
-    border-radius:8px; font-size:14px; color:var(--text); margin-bottom:14px; font-family:inherit;
-    transition:border-color .2s;
-  }
+  input, textarea, select { width:100%; padding:11px 14px; background:var(--input); border:1px solid var(--border);
+    border-radius:8px; font-size:14px; color:var(--text); margin-bottom:14px; font-family:inherit; }
   input:focus, textarea:focus, select:focus { outline:none; border-color:var(--accent); }
   textarea { resize:vertical; min-height:60px; }
-  button {
-    padding:11px 18px; border:none; border-radius:8px; font-size:14px; font-weight:600;
-    cursor:pointer; transition:all .15s; font-family:inherit;
-  }
+  button { padding:11px 18px; border:none; border-radius:8px; font-size:14px; font-weight:600;
+    cursor:pointer; transition:all .15s; font-family:inherit; }
   button:disabled { opacity:.6; cursor:not-allowed; }
   .btn-primary { background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#fff; width:100%; }
-  .btn-primary:hover:not(:disabled) { transform:translateY(-1px); }
   .btn-danger  { background:var(--danger); color:#fff; }
-  .btn-danger:hover:not(:disabled) { background:#dc2626; }
   .btn-sm      { padding:6px 12px; font-size:12px; }
-  .error {
-    background:rgba(239,68,68,.15); border:1px solid var(--danger); color:#fca5a5;
-    padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:14px;
-  }
+  .error { background:rgba(239,68,68,.15); border:1px solid var(--danger); color:#fca5a5;
+    padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:14px; }
   .hint { text-align:center; font-size:12px; color:var(--sec); margin-top:12px; }
 
-  /* ===== APP LAYOUT ===== */
+  /* APP */
   #app-view { display:flex; min-height:100vh; }
-  .sidebar {
-    width:240px; background:var(--sidebar); padding:20px 12px; position:fixed;
-    top:0; left:0; bottom:0; overflow-y:auto; display:flex; flex-direction:column; gap:4px;
-    z-index:100;
-  }
-  .sidebar .brand {
-    display:flex; align-items:center; gap:10px; padding:0 12px 20px;
-    border-bottom:1px solid var(--border); margin-bottom:16px;
-  }
+  .sidebar { width:240px; background:var(--sidebar); padding:20px 12px; position:fixed;
+    top:0; left:0; bottom:0; overflow-y:auto; display:flex; flex-direction:column; gap:4px; z-index:100; }
+  .sidebar .brand { display:flex; align-items:center; gap:10px; padding:0 12px 20px;
+    border-bottom:1px solid var(--border); margin-bottom:16px; }
   .sidebar .brand img { width:36px; height:36px; border-radius:8px; object-fit:cover; }
   .sidebar .brand span { font-weight:700; font-size:15px; }
-  .nav-item {
-    display:flex; align-items:center; gap:12px; padding:11px 14px;
-    border-radius:8px; cursor:pointer; color:var(--sec); font-size:14px; font-weight:500;
-    transition:all .15s; text-decoration:none;
-  }
+  .nav-item { display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:8px;
+    cursor:pointer; color:var(--sec); font-size:14px; font-weight:500; transition:all .15s; }
   .nav-item:hover { background:var(--card); color:var(--text); }
   .nav-item.active { background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(139,92,246,.2)); color:var(--text); }
   .nav-item .ico { font-size:18px; width:20px; text-align:center; }
   .sidebar .footer { margin-top:auto; padding-top:16px; border-top:1px solid var(--border); }
-  .user-mini {
-    display:flex; align-items:center; gap:10px; padding:10px 12px;
-    border-radius:8px; background:var(--card); margin-bottom:8px;
-  }
-  .user-mini img, .user-mini .avatar {
-    width:32px; height:32px; border-radius:50%; object-fit:cover;
-    background:linear-gradient(135deg,var(--accent),var(--accent-2));
-    display:flex; align-items:center; justify-content:center;
-    font-weight:700; font-size:13px; flex-shrink:0;
-  }
+  .user-mini { display:flex; align-items:center; gap:10px; padding:10px 12px;
+    border-radius:8px; background:var(--card); margin-bottom:8px; }
+  .user-mini img, .user-mini .avatar { width:32px; height:32px; border-radius:50%; object-fit:cover;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex; align-items:center;
+    justify-content:center; font-weight:700; font-size:13px; flex-shrink:0; }
   .user-mini .info { overflow:hidden; }
   .user-mini .info .n { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .user-mini .info .r { font-size:11px; color:var(--sec); }
   .btn-logout { width:100%; background:var(--card); color:var(--danger); }
   .btn-logout:hover { background:var(--card-h); }
 
-  .main {
-    margin-left:240px; flex:1; padding:24px 32px; min-height:100vh;
-  }
+  .main { margin-left:240px; flex:1; padding:24px 32px; min-height:100vh; }
   .page-header { margin-bottom:24px; }
   .page-header h1 { font-size:26px; margin-bottom:4px; }
   .page-header p { color:var(--sec); font-size:14px; }
 
-  /* ===== STATS ===== */
-  .stats-grid {
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:16px; margin-bottom:24px;
-  }
-  .stat-card {
-    background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;
-  }
+  /* BANNER LAGU (gaya Spotify) */
+  .hero-song { position:relative; border-radius:16px; overflow:hidden; margin-bottom:24px;
+    background:linear-gradient(135deg,#1f1f3a,#2d1b4e); border:1px solid var(--border);
+    display:flex; gap:20px; padding:20px; align-items:center; }
+  .hero-song .cover { width:140px; height:140px; border-radius:12px; object-fit:cover;
+    background:var(--input); flex-shrink:0; }
+  .hero-song .meta { flex:1; min-width:0; }
+  .hero-song .badge-hero { display:inline-block; background:rgba(99,102,241,.25); color:#c7d2fe;
+    font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; margin-bottom:10px; letter-spacing:.5px; }
+  .hero-song h2 { font-size:24px; margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hero-song p { color:var(--sec); font-size:13px; margin-bottom:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hero-song .btn-play { background:var(--accent); color:#fff; border-radius:50%; width:52px; height:52px;
+    font-size:20px; padding:0; display:flex; align-items:center; justify-content:center; }
+  .hero-song .btn-play:hover { transform:scale(1.05); }
+
+  /* STATS */
+  .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px; }
+  .stat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
   .stat-card .lbl { font-size:12px; color:var(--sec); margin-bottom:8px; }
-  .stat-card .val { font-size:28px; font-weight:700; margin-bottom:4px; }
+  .stat-card .val { font-size:28px; font-weight:700; }
   .stat-card .val.green { color:var(--success); }
   .stat-card .val.blue  { color:var(--info); }
   .stat-card .val.orange { color:var(--warning); }
 
-  /* ===== CHARTS ===== */
-  .charts-grid {
-    display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;
-  }
+  /* CHARTS */
+  .charts-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
   @media (max-width:900px) { .charts-grid { grid-template-columns:1fr; } }
-  .chart-card {
-    background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;
-  }
+  .chart-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
   .chart-card h3 { font-size:15px; margin-bottom:16px; }
   .chart-wrap { position:relative; height:280px; }
 
-  /* ===== SECTION / CARD ===== */
-  .card {
-    background:var(--card); border:1px solid var(--border); border-radius:12px;
-    padding:20px; margin-bottom:16px;
-  }
-  .card-header {
-    display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;
-    flex-wrap:wrap; gap:10px;
-  }
+  /* CARD */
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
+  .card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
   .card-header h3 { font-size:16px; }
   .card-header .actions { display:flex; gap:8px; }
 
-  /* ===== TABLE ===== */
+  /* TABLE */
   table { width:100%; border-collapse:collapse; font-size:14px; }
   th, td { padding:10px 12px; text-align:left; border-bottom:1px solid var(--border); }
   th { color:var(--sec); font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
   tr:hover td { background:var(--card-h); }
-  .badge {
-    display:inline-block; padding:3px 9px; border-radius:20px; font-size:11px; font-weight:600;
-  }
+  .badge { display:inline-block; padding:3px 9px; border-radius:20px; font-size:11px; font-weight:600; }
   .badge.admin { background:rgba(99,102,241,.2); color:#a5b4fc; }
   .badge.siswa { background:rgba(29,185,84,.2); color:#6ee7b7; }
-  .badge.masuk { background:rgba(29,185,84,.2); color:#6ee7b7; }
-  .badge.izin  { background:rgba(59,130,246,.2); color:#93c5fd; }
-  .badge.sakit { background:rgba(245,158,11,.2); color:#fcd34d; }
-  .badge.alpha { background:rgba(239,68,68,.2); color:#fca5a5; }
 
-  /* ===== PLAYLIST ===== */
-  .songs-grid {
-    display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px;
-  }
-  .song-card {
-    background:var(--card); border:1px solid var(--border); border-radius:12px;
-    padding:14px; cursor:pointer; transition:all .2s; position:relative;
-  }
+  /* PLAYLIST */
+  .songs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; }
+  .song-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px;
+    cursor:pointer; transition:all .2s; position:relative; }
   .song-card:hover { background:var(--card-h); transform:translateY(-2px); }
-  .song-card img {
-    width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px; margin-bottom:10px;
-    background:var(--input);
-  }
+  .song-card img { width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px; margin-bottom:10px; background:var(--input); }
   .song-card .title { font-size:14px; font-weight:600; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .song-card .desc  { font-size:12px; color:var(--sec); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .song-card .del-btn {
-    position:absolute; top:8px; right:8px; background:rgba(0,0,0,.7); color:var(--danger);
+  .song-card .del-btn { position:absolute; top:8px; right:8px; background:rgba(0,0,0,.7); color:var(--danger);
     border-radius:50%; width:28px; height:28px; padding:0; display:flex; align-items:center; justify-content:center;
-    opacity:0; transition:opacity .2s;
-  }
+    opacity:0; transition:opacity .2s; }
   .song-card:hover .del-btn { opacity:1; }
   .song-card.playing { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent); }
 
-  /* ===== PLAYER ===== */
-  #player {
-    position:fixed; bottom:0; left:240px; right:0; background:#181818;
-    border-top:1px solid var(--border); padding:12px 24px; z-index:90;
-    display:flex; align-items:center; gap:16px;
-  }
-  @media (max-width:900px) { #player { left:0; } .main, .sidebar { margin-left:0 !important; width:auto !important; } }
+  /* PLAYER */
+  #player { position:fixed; bottom:0; left:240px; right:0; background:#181818; border-top:1px solid var(--border);
+    padding:12px 24px; z-index:90; display:flex; align-items:center; gap:16px; }
+  @media (max-width:900px) { #player { left:0; } }
   #player .cover { width:48px; height:48px; border-radius:6px; object-fit:cover; background:var(--input); }
   #player .info { min-width:180px; }
   #player .info .t { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -197,74 +144,48 @@
   #player .bar { flex:1; height:6px; background:var(--input); border-radius:3px; cursor:pointer; position:relative; }
   #player .bar .fill { height:100%; background:var(--accent); border-radius:3px; width:0; }
 
-  /* ===== MODAL ===== */
-  .modal {
-    position:fixed; inset:0; background:rgba(0,0,0,.7); display:flex;
-    align-items:center; justify-content:center; padding:20px; z-index:1000;
-    animation:fadeIn .2s;
-  }
-  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-  .modal-content {
-    background:var(--card); border:1px solid var(--border); border-radius:16px;
-    padding:28px; width:100%; max-width:500px; max-height:90vh; overflow-y:auto;
-    animation:slideUp .3s;
-  }
-  .modal-content h2 { font-size:20px; margin-bottom:20px; }
-  .modal-content .row { margin-bottom:14px; }
-
-  /* ===== PAPAN NAMA ===== */
-  .papan-grid {
-    display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px;
-  }
-  .papan-card {
-    background:var(--card); border:1px solid var(--border); border-radius:12px;
-    padding:16px; text-align:center;
-  }
-  .papan-card .photo {
-    width:80px; height:80px; border-radius:50%; margin:0 auto 12px;
-    background:linear-gradient(135deg,var(--accent),var(--accent-2));
-    display:flex; align-items:center; justify-content:center;
-    font-size:28px; font-weight:700; overflow:hidden;
-  }
+  /* PAPAN NAMA (di dashboard) */
+  .papan-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
+  .papan-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; }
+  .papan-card .photo { width:64px; height:64px; border-radius:50%; margin:0 auto 10px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex; align-items:center;
+    justify-content:center; font-size:22px; font-weight:700; overflow:hidden; }
   .papan-card .photo img { width:100%; height:100%; object-fit:cover; }
-  .papan-card .name { font-size:14px; font-weight:600; margin-bottom:4px; }
-  .papan-card .uname { font-size:12px; color:var(--sec); margin-bottom:8px; }
+  .papan-card .name { font-size:13px; font-weight:600; margin-bottom:2px; }
+  .papan-card .uname { font-size:11px; color:var(--sec); }
 
-  /* ===== TOAST ===== */
-  #toast {
-    position:fixed; bottom:100px; right:24px; padding:14px 20px;
-    border-radius:8px; font-size:14px; font-weight:500; z-index:2000;
-    color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.4); opacity:0;
-    transform:translateY(20px); transition:all .3s; pointer-events:none;
-  }
+  /* MODAL */
+  .modal { position:fixed; inset:0; background:rgba(0,0,0,.7); display:flex; align-items:center;
+    justify-content:center; padding:20px; z-index:1000; }
+  .modal-content { background:var(--card); border:1px solid var(--border); border-radius:16px;
+    padding:28px; width:100%; max-width:500px; max-height:90vh; overflow-y:auto; }
+  .modal-content h2 { font-size:20px; margin-bottom:20px; }
+
+  /* TOAST */
+  #toast { position:fixed; bottom:100px; right:24px; padding:14px 20px; border-radius:8px;
+    font-size:14px; font-weight:500; z-index:2000; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.4);
+    opacity:0; transform:translateY(20px); transition:all .3s; pointer-events:none; }
   #toast.show { opacity:1; transform:translateY(0); }
   #toast.success { background:var(--success); }
   #toast.error   { background:var(--danger); }
   #toast.info    { background:var(--info); }
 
-  /* ABSENSI TABLE */
-  .absen-row select { width:140px; margin:0; padding:6px 10px; font-size:13px; }
-  .absen-row input.ket { margin:0; padding:6px 10px; font-size:13px; }
-
-  @media (max-width:768px) {
-    .main { padding:16px; }
-    .stats-grid { grid-template-columns:repeat(2,1fr); }
-    .stat-card .val { font-size:22px; }
-    .sidebar { transform:translateX(-100%); transition:transform .3s; width:240px; }
+  .menu-toggle { display:none; position:fixed; top:16px; left:16px; z-index:110; background:var(--card);
+    color:var(--text); width:44px; height:44px; border-radius:8px; align-items:center; justify-content:center;
+    font-size:22px; padding:0; border:1px solid var(--border); }
+  @media (max-width:900px) {
+    .main { padding:16px; margin-left:0; }
+    .sidebar { transform:translateX(-100%); transition:transform .3s; }
     .sidebar.open { transform:translateX(0); }
-    #player { left:0; }
-    .menu-toggle { display:flex !important; }
-  }
-  .menu-toggle {
-    display:none; position:fixed; top:16px; left:16px; z-index:110;
-    background:var(--card); color:var(--text); width:44px; height:44px; border-radius:8px;
-    align-items:center; justify-content:center; font-size:22px; padding:0; border:1px solid var(--border);
+    .menu-toggle { display:flex; }
+    .hero-song { flex-direction:column; text-align:center; }
+    .hero-song .cover { width:110px; height:110px; }
   }
 </style>
 </head>
 <body>
 
-<!-- ============ LOGIN ============ -->
+<!-- ================= LOGIN ================= -->
 <div id="login-view">
   <div class="login-card">
     <div class="logo"><img src="logo.png" alt="Logo" onerror="this.outerHTML='<span style=&quot;font-size:48px&quot;>🎵</span>'"></div>
@@ -280,7 +201,7 @@
   </div>
 </div>
 
-<!-- ============ APP ============ -->
+<!-- ================= APP ================= -->
 <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
 
 <div id="app-view" class="hidden">
@@ -294,7 +215,6 @@
     <a class="nav-item admin-only" data-view="siswa" onclick="nav('siswa',this)"><span class="ico">👥</span>Data Siswa</a>
     <a class="nav-item admin-only" data-view="akun" onclick="nav('akun',this)"><span class="ico">🔐</span>Kelola Akun</a>
     <a class="nav-item" data-view="pengaturan" onclick="nav('pengaturan',this)"><span class="ico">⚙️</span>Pengaturan</a>
-    <a class="nav-item" data-view="papan-nama" onclick="nav('papan-nama',this)"><span class="ico">📛</span>Papan Nama</a>
     <div class="footer">
       <div class="user-mini">
         <div id="mini-avatar" class="avatar">?</div>
@@ -311,15 +231,32 @@
 
     <!-- DASHBOARD -->
     <section id="view-dashboard" class="view">
-      <div class="page-header">
-        <h1>📊 Dashboard Absensi</h1>
-        <p>Ringkasan kehadiran siswa</p>
+      <div class="page-header"><h1>📊 Dashboard</h1><p>Ringkasan & papan nama</p></div>
+
+      <!-- BANNER LAGU -->
+      <div id="hero-song" class="hero-song hidden">
+        <img id="hero-cover" class="cover" src="" alt="">
+        <div class="meta">
+          <span class="badge-hero">🔥 LAGU UNGGULAN</span>
+          <h2 id="hero-title">-</h2>
+          <p id="hero-desc">-</p>
+          <button class="btn-play" id="hero-play" onclick="playHero()">▶</button>
+        </div>
       </div>
+
       <div class="stats-grid" id="stats-grid"></div>
       <div class="charts-grid">
-        <div class="chart-card"><h3>Distribusi Kehadiran (All Time)</h3><div class="chart-wrap"><canvas id="chart-doughnut"></canvas></div></div>
-        <div class="chart-card"><h3>Kehadiran 6 Bulan Terakhir</h3><div class="chart-wrap"><canvas id="chart-bar"></canvas></div></div>
+        <div class="chart-card"><h3>Distribusi Kehadiran</h3><div class="chart-wrap"><canvas id="chart-doughnut"></canvas></div></div>
+        <div class="chart-card"><h3>6 Bulan Terakhir</h3><div class="chart-wrap"><canvas id="chart-bar"></canvas></div></div>
       </div>
+
+      <!-- PAPAN NAMA -->
+      <div class="card">
+        <div class="card-header"><h3>📛 Papan Nama</h3></div>
+        <div id="papan-grid" class="papan-grid"></div>
+      </div>
+
+      <!-- INPUT ABSENSI -->
       <div class="card">
         <div class="card-header"><h3>✏️ Input Kehadiran</h3>
           <div class="actions">
@@ -344,8 +281,8 @@
     <!-- SISWA -->
     <section id="view-siswa" class="view hidden">
       <div class="page-header" style="display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:10px">
-        <div><h1>👥 Data Siswa</h1><p>Kelola data siswa untuk absensi</p></div>
-        <button class="btn-primary" style="width:auto" onclick="openModal('modal-add-siswa')">+ Tambah Siswa</button>
+        <div><h1>👥 Data Siswa</h1><p>Kelola siswa</p></div>
+        <button class="btn-primary" style="width:auto" onclick="openModal('modal-add-siswa')">+ Tambah</button>
       </div>
       <div class="card"><div id="siswa-list"></div></div>
     </section>
@@ -353,38 +290,34 @@
     <!-- AKUN -->
     <section id="view-akun" class="view hidden">
       <div class="page-header" style="display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:10px">
-        <div><h1>🔐 Kelola Akun</h1><p>Semua akun login aplikasi</p></div>
-        <button class="btn-primary" style="width:auto" onclick="openModal('modal-add-akun')">+ Tambah Akun</button>
+        <div><h1>🔐 Kelola Akun</h1><p>Semua akun login</p></div>
+        <button class="btn-primary" style="width:auto" onclick="openModal('modal-add-akun')">+ Tambah</button>
       </div>
       <div class="card"><div id="akun-list"></div></div>
     </section>
 
     <!-- PENGATURAN -->
     <section id="view-pengaturan" class="view hidden">
-      <div class="page-header"><h1>⚙️ Pengaturan</h1><p>Ubah profil, username, dan password Anda</p></div>
+      <div class="page-header"><h1>⚙️ Pengaturan</h1><p>Profil & akun</p></div>
       <div class="card" style="max-width:600px">
-        <div class="row" style="text-align:center;margin-bottom:20px">
-          <div id="set-avatar" class="avatar" style="width:90px;height:90px;font-size:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;margin:0 auto 12px;overflow:hidden;font-weight:700"></div>
+        <div style="text-align:center;margin-bottom:20px">
+          <div id="set-avatar" style="width:90px;height:90px;font-size:32px;border-radius:50%;
+            background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;
+            align-items:center;justify-content:center;margin:0 auto 12px;overflow:hidden;font-weight:700"></div>
           <input type="file" id="set-photo" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
           <button class="btn-primary" style="width:auto;font-size:13px" onclick="document.getElementById('set-photo').click()">Ganti Foto</button>
         </div>
-        <div class="row"><label>Nama Lengkap</label><input id="set-nama" type="text" placeholder="Nama kamu"></div>
-        <div class="row"><label>Username</label><input id="set-username" type="text" placeholder="Username"></div>
-        <div class="row"><label>Password Baru (kosongkan jika tidak diubah)</label><input id="set-password" type="password" placeholder="••••••••"></div>
-        <button class="btn-primary" onclick="saveProfile()">Simpan Perubahan</button>
+        <label>Nama Lengkap</label><input id="set-nama" type="text">
+        <label>Username</label><input id="set-username" type="text">
+        <label>Password Baru (kosongkan jika tidak diubah)</label><input id="set-password" type="password">
+        <button class="btn-primary" onclick="saveProfile()">Simpan</button>
       </div>
-    </section>
-
-    <!-- PAPAN NAMA -->
-    <section id="view-papan-nama" class="view hidden">
-      <div class="page-header"><h1>📛 Papan Nama</h1><p>Semua pengguna aplikasi</p></div>
-      <div id="papan-grid" class="papan-grid"></div>
     </section>
 
   </main>
 </div>
 
-<!-- ============ PLAYER ============ -->
+<!-- ================= PLAYER ================= -->
 <div id="player" class="hidden">
   <img id="pl-cover" class="cover" src="" alt="">
   <div class="info"><div class="t" id="pl-title">-</div><div class="a" id="pl-desc">-</div></div>
@@ -397,14 +330,14 @@
   <audio id="audio" ontimeupdate="onTimeUpdate()" onended="onEnded()" onloadedmetadata="onMeta()"></audio>
 </div>
 
-<!-- ============ MODALS ============ -->
+<!-- ================= MODALS ================= -->
 <div id="modal-add-song" class="modal hidden">
   <div class="modal-content">
     <h2>Tambah Lagu</h2>
-    <div class="row"><label>Cover (wajib)</label><input type="file" id="song-cover" accept="image/*"></div>
-    <div class="row"><label>Judul Lagu</label><input type="text" id="song-title" placeholder="Judul"></div>
-    <div class="row"><label>Deskripsi (opsional)</label><textarea id="song-desc" placeholder="Deskripsi..."></textarea></div>
-    <div class="row"><label>File Lagu (wajib)</label><input type="file" id="song-file" accept="audio/*"></div>
+    <label>Cover (wajib)</label><input type="file" id="song-cover" accept="image/*">
+    <label>Judul Lagu</label><input type="text" id="song-title">
+    <label>Deskripsi (opsional)</label><textarea id="song-desc"></textarea>
+    <label>File Lagu (wajib)</label><input type="file" id="song-file" accept="audio/*">
     <div style="display:flex;gap:8px;margin-top:8px">
       <button class="btn-primary" onclick="submitSong()">Upload</button>
       <button class="btn-danger" onclick="closeModal('modal-add-song')">Batal</button>
@@ -415,9 +348,9 @@
 <div id="modal-add-siswa" class="modal hidden">
   <div class="modal-content">
     <h2>Tambah Siswa</h2>
-    <div class="row"><label>NIS</label><input id="sw-nis" placeholder="Nomor Induk"></div>
-    <div class="row"><label>Nama</label><input id="sw-nama" placeholder="Nama lengkap"></div>
-    <div class="row"><label>Kelas</label><input id="sw-kelas" placeholder="XII-A"></div>
+    <label>NIS</label><input id="sw-nis">
+    <label>Nama</label><input id="sw-nama">
+    <label>Kelas</label><input id="sw-kelas">
     <div style="display:flex;gap:8px;margin-top:8px">
       <button class="btn-primary" onclick="submitSiswa()">Simpan</button>
       <button class="btn-danger" onclick="closeModal('modal-add-siswa')">Batal</button>
@@ -428,12 +361,10 @@
 <div id="modal-add-akun" class="modal hidden">
   <div class="modal-content">
     <h2>Tambah Akun</h2>
-    <div class="row"><label>Username</label><input id="ak-username" placeholder="username"></div>
-    <div class="row"><label>Password</label><input id="ak-password" placeholder="password"></div>
-    <div class="row"><label>Nama</label><input id="ak-nama" placeholder="Nama"></div>
-    <div class="row"><label>Role</label>
-      <select id="ak-role"><option value="siswa">Siswa</option><option value="admin">Admin</option></select>
-    </div>
+    <label>Username</label><input id="ak-username">
+    <label>Password</label><input id="ak-password">
+    <label>Nama</label><input id="ak-nama">
+    <label>Role</label><select id="ak-role"><option value="siswa">Siswa</option><option value="admin">Admin</option></select>
     <div style="display:flex;gap:8px;margin-top:8px">
       <button class="btn-primary" onclick="submitAkun()">Simpan</button>
       <button class="btn-danger" onclick="closeModal('modal-add-akun')">Batal</button>
@@ -444,24 +375,32 @@
 <div id="toast"></div>
 
 <script>
-/* ====== GANTI URL INI KALAU DEPLOYMENT BARU ====== */
+/* ====== GANTI KALAU URL DEPLOY BERUBAH ====== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbwNypd1fKclaMONch3EdtCXKDPJeQwrm29ZzN42KuDLQ9V5xMjObRpA3ExEUt52WhTj_Q/exec';
 const MAX_FILE = 15 * 1024 * 1024;
 
 let TOKEN = null;
-let USER = null;
+let USER  = null;
 let currentSong = null;
 let allSongs = [];
+let heroSong = null;
 let chartDoughnut = null;
 let chartBar = null;
+let currentObjectURL = null;
 
 /* ===== API ===== */
 async function api(payload) {
   const res = await fetch(API_URL, {
-    method:'POST', redirect:'follow',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    method: 'POST', redirect: 'follow',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(payload)
   });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+async function apiGet(params) {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(API_URL + '?' + qs, { method: 'GET', redirect: 'follow' });
   if (!res.ok) throw new Error('HTTP ' + res.status);
   return res.json();
 }
@@ -469,10 +408,10 @@ async function api(payload) {
 /* ===== TOAST ===== */
 function toast(msg, type) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'show ' + (type||'info');
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.className = '', 3000);
+  t.textContent = msg; t.className = 'show ' + (type || 'info');
+  clearTimeout(t._t); t._t = setTimeout(() => t.className = '', 3000);
 }
+function esc(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 /* ===== LOGIN ===== */
 async function doLogin() {
@@ -481,11 +420,11 @@ async function doLogin() {
   const err = document.getElementById('login-error');
   const btn = document.getElementById('login-btn');
   err.classList.add('hidden');
-  if (!u || !p) { err.textContent='Isi username & password'; err.classList.remove('hidden'); return; }
+  if (!u || !p) { err.textContent = 'Isi username & password'; err.classList.remove('hidden'); return; }
 
   btn.disabled = true; btn.textContent = 'Memproses...';
   try {
-    const r = await api({ action:'login', username:u, password:p });
+    const r = await api({ action: 'login', username: u, password: p });
     if (r.success) {
       TOKEN = r.token; USER = r.user;
       sessionStorage.setItem('token', r.token);
@@ -494,13 +433,13 @@ async function doLogin() {
     } else {
       err.textContent = r.message; err.classList.remove('hidden');
     }
-  } catch(e) {
+  } catch (e) {
     err.textContent = 'Koneksi gagal: ' + e.message; err.classList.remove('hidden');
   } finally {
     btn.disabled = false; btn.textContent = 'Login';
   }
 }
-document.getElementById('login-password').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
 function enterApp() {
   document.getElementById('login-view').classList.add('hidden');
@@ -509,7 +448,7 @@ function enterApp() {
   document.getElementById('mini-role').textContent = USER.role;
   const av = document.getElementById('mini-avatar');
   if (USER.foto_url) av.innerHTML = `<img src="${USER.foto_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-  else av.textContent = (USER.nama||'?')[0].toUpperCase();
+  else av.textContent = (USER.nama || '?')[0].toUpperCase();
 
   document.querySelectorAll('.admin-only').forEach(el => {
     el.style.display = USER.role === 'admin' ? '' : 'none';
@@ -518,9 +457,10 @@ function enterApp() {
 }
 
 function doLogout() {
-  if (TOKEN) api({ action:'logout', token:TOKEN }).catch(()=>{});
+  if (TOKEN) api({ action: 'logout', token: TOKEN }).catch(() => {});
   TOKEN = null; USER = null;
   sessionStorage.clear();
+  if (currentObjectURL) URL.revokeObjectURL(currentObjectURL);
   document.getElementById('app-view').classList.add('hidden');
   document.getElementById('login-view').classList.remove('hidden');
   document.getElementById('login-password').value = '';
@@ -537,73 +477,99 @@ function nav(view, el) {
   else document.querySelector(`.nav-item[data-view="${view}"]`)?.classList.add('active');
   document.querySelector('.sidebar').classList.remove('open');
 
-  if (view === 'dashboard')   loadDashboard();
-  if (view === 'playlist')    loadSongs();
-  if (view === 'siswa')       loadSiswa();
-  if (view === 'akun')        loadAkun();
-  if (view === 'pengaturan')  loadPengaturan();
-  if (view === 'papan-nama')  loadPapan();
+  if (view === 'dashboard')  loadDashboard();
+  if (view === 'playlist')   loadSongs();
+  if (view === 'siswa')      loadSiswa();
+  if (view === 'akun')       loadAkun();
+  if (view === 'pengaturan') loadPengaturan();
 }
 
 /* ===== DASHBOARD ===== */
 async function loadDashboard() {
   try {
-    const r = await api({ action:'getDashboard', token:TOKEN });
+    const r = await api({ action: 'getDashboard', token: TOKEN });
     if (!r.success) return toast(r.message, 'error');
     const s = r.stats;
 
     document.getElementById('stats-grid').innerHTML = `
       <div class="stat-card"><div class="lbl">Total Siswa</div><div class="val blue">${s.totalSiswa}</div></div>
       <div class="stat-card"><div class="lbl">Hadir Hari Ini</div><div class="val green">${s.hadirHariIni}</div></div>
-      <div class="stat-card"><div class="lbl">% Kehadiran (All Time)</div><div class="val orange">${s.persenKehadiran}%</div></div>
-      <div class="stat-card"><div class="lbl">Total Absensi</div><div class="val">${s.totalAbsensi}</div></div>
-    `;
+      <div class="stat-card"><div class="lbl">% Kehadiran</div><div class="val orange">${s.persenKehadiran}%</div></div>
+      <div class="stat-card"><div class="lbl">Total Absensi</div><div class="val">${s.totalAbsensi}</div></div>`;
 
-    // Doughnut
+    // Banner lagu
+    heroSong = r.featuredSong;
+    const hero = document.getElementById('hero-song');
+    if (heroSong) {
+      hero.classList.remove('hidden');
+      document.getElementById('hero-title').textContent = heroSong.title;
+      document.getElementById('hero-desc').textContent = heroSong.description || '';
+      document.getElementById('hero-cover').src = heroSong.cover_url;
+      document.getElementById('hero-cover').onerror = function () { this.style.opacity = .3; };
+      document.getElementById('hero-play').onclick = () => playSong(heroSong.id);
+    } else hero.classList.add('hidden');
+
+    // Papan nama
+    const pg = document.getElementById('papan-grid');
+    if (r.papanNama && r.papanNama.length) {
+      pg.innerHTML = r.papanNama.map(u => {
+        const initial = (u.nama || '?')[0].toUpperCase();
+        const img = u.foto_url
+          ? `<img src="${u.foto_url}" onerror="this.outerHTML='${initial}'">`
+          : initial;
+        return `<div class="papan-card">
+          <div class="photo">${img}</div>
+          <div class="name">${esc(u.nama)}</div>
+          <div class="uname">@${esc(u.username)}</div>
+        </div>`;
+      }).join('');
+    } else pg.innerHTML = '<p style="color:var(--sec);font-size:13px">Belum ada user.</p>';
+
+    // Charts
     if (chartDoughnut) chartDoughnut.destroy();
     chartDoughnut = new Chart(document.getElementById('chart-doughnut'), {
-      type:'doughnut',
-      data:{
-        labels:['Masuk','Izin','Sakit','Alpha'],
-        datasets:[{ data:[s.statusCount.masuk, s.statusCount.izin, s.statusCount.sakit, s.statusCount.alpha],
-          backgroundColor:['#1db954','#3b82f6','#f59e0b','#ef4444'], borderWidth:0 }]
+      type: 'doughnut',
+      data: {
+        labels: ['Masuk', 'Izin', 'Sakit', 'Alpha'],
+        datasets: [{
+          data: [s.statusCount.masuk, s.statusCount.izin, s.statusCount.sakit, s.statusCount.alpha],
+          backgroundColor: ['#1db954', '#3b82f6', '#f59e0b', '#ef4444'], borderWidth: 0
+        }]
       },
-      options:{ plugins:{ legend:{ labels:{ color:'#fff' } } }, maintainAspectRatio:false }
+      options: { plugins: { legend: { labels: { color: '#fff' } } }, maintainAspectRatio: false }
     });
 
-    // Bar
     if (chartBar) chartBar.destroy();
     const labels = s.months.map(m => {
       const [y, mo] = m.split('-');
       const names = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-      return names[parseInt(mo)-1] + ' ' + y.slice(2);
+      return names[parseInt(mo) - 1] + ' ' + y.slice(2);
     });
     chartBar = new Chart(document.getElementById('chart-bar'), {
-      type:'bar',
-      data:{
+      type: 'bar',
+      data: {
         labels,
-        datasets:[
-          { label:'Masuk', data:s.months.map(m=>s.monthly[m].masuk), backgroundColor:'#1db954' },
-          { label:'Izin',  data:s.months.map(m=>s.monthly[m].izin),  backgroundColor:'#3b82f6' },
-          { label:'Sakit', data:s.months.map(m=>s.monthly[m].sakit), backgroundColor:'#f59e0b' },
-          { label:'Alpha', data:s.months.map(m=>s.monthly[m].alpha), backgroundColor:'#ef4444' }
+        datasets: [
+          { label: 'Masuk', data: s.months.map(m => s.monthly[m].masuk), backgroundColor: '#1db954' },
+          { label: 'Izin',  data: s.months.map(m => s.monthly[m].izin),  backgroundColor: '#3b82f6' },
+          { label: 'Sakit', data: s.months.map(m => s.monthly[m].sakit), backgroundColor: '#f59e0b' },
+          { label: 'Alpha', data: s.months.map(m => s.monthly[m].alpha), backgroundColor: '#ef4444' }
         ]
       },
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        scales:{
-          x:{ stacked:true, ticks:{color:'#b3b3b3'}, grid:{color:'#2a2a2a'} },
-          y:{ stacked:true, ticks:{color:'#b3b3b3'}, grid:{color:'#2a2a2a'} }
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true, ticks: { color: '#b3b3b3' }, grid: { color: '#2a2a2a' } },
+          y: { stacked: true, ticks: { color: '#b3b3b3' }, grid: { color: '#2a2a2a' } }
         },
-        plugins:{ legend:{ labels:{ color:'#fff' } } }
+        plugins: { legend: { labels: { color: '#fff' } } }
       }
     });
 
-    // Isi tanggal absen default hari ini
     const today = new Date().toISOString().split('T')[0];
     if (!document.getElementById('absen-tanggal').value)
       document.getElementById('absen-tanggal').value = today;
-  } catch(e) { toast('Error: ' + e.message, 'error'); }
+  } catch (e) { toast('Error: ' + e.message, 'error'); }
 }
 
 async function loadAbsensiForm() {
@@ -611,34 +577,33 @@ async function loadAbsensiForm() {
   if (!tgl) return toast('Pilih tanggal', 'error');
   try {
     const [siswa, absen] = await Promise.all([
-      api({ action:'getSiswa', token:TOKEN }),
-      api({ action:'getAbsensiHariIni', token:TOKEN, tanggal:tgl })
+      api({ action: 'getSiswa', token: TOKEN }),
+      api({ action: 'getAbsensiHariIni', token: TOKEN, tanggal: tgl })
     ]);
     if (!siswa.success) return toast(siswa.message, 'error');
-
     if (!siswa.siswa.length) {
       document.getElementById('absen-form-wrap').innerHTML = '<p style="color:var(--sec);font-size:13px">Belum ada siswa.</p>';
       return;
     }
     const map = {};
-    (absen.records||[]).forEach(r => map[r.siswaId] = r);
+    (absen.records || []).forEach(r => map[r.siswaId] = r);
 
     let html = '<table><thead><tr><th>Nama</th><th>Kelas</th><th>Status</th><th>Keterangan</th></tr></thead><tbody>';
     siswa.siswa.forEach(s => {
-      const cur = map[s.id] || { status:'masuk', keterangan:'' };
-      html += `<tr class="absen-row">
-        <td>${esc(s.nama)}</td>
-        <td>${esc(s.kelas||'-')}</td>
-        <td><select data-sid="${s.id}" class="ab-status">
-          ${['masuk','izin','sakit','alpha'].map(x => `<option value="${x}" ${cur.status===x?'selected':''}>${x}</option>`).join('')}
+      const cur = map[s.id] || { status: 'masuk', keterangan: '' };
+      html += `<tr>
+        <td>${esc(s.nama)}</td><td>${esc(s.kelas || '-')}</td>
+        <td><select class="ab-status" data-sid="${s.id}">
+          ${['masuk','izin','sakit','alpha'].map(x =>
+            `<option value="${x}" ${cur.status === x ? 'selected' : ''}>${x}</option>`).join('')}
         </select></td>
-        <td><input class="ket" data-sid="${s.id}" value="${esc(cur.keterangan||'')}" placeholder="-"></td>
+        <td><input class="ket" data-sid="${s.id}" value="${esc(cur.keterangan || '')}" placeholder="-"></td>
       </tr>`;
     });
     html += '</tbody></table>';
-    html += '<div style="margin-top:16px"><button class="btn-primary" style="width:auto" onclick="saveAbsensi()">💾 Simpan Kehadiran</button></div>';
+    html += '<div style="margin-top:16px"><button class="btn-primary" style="width:auto" onclick="saveAbsensi()">💾 Simpan</button></div>';
     document.getElementById('absen-form-wrap').innerHTML = html;
-  } catch(e) { toast(e.message, 'error'); }
+  } catch (e) { toast(e.message, 'error'); }
 }
 
 async function saveAbsensi() {
@@ -646,106 +611,132 @@ async function saveAbsensi() {
   const records = [...document.querySelectorAll('.ab-status')].map(sel => {
     const sid = sel.dataset.sid;
     const ket = document.querySelector(`.ket[data-sid="${sid}"]`).value;
-    return { siswaId:sid, status:sel.value, keterangan:ket };
+    return { siswaId: sid, status: sel.value, keterangan: ket };
   });
   try {
-    const r = await api({ action:'saveAbsensi', token:TOKEN, tanggal:tgl, records });
-    if (r.success) { toast('Kehadiran disimpan ✅', 'success'); loadDashboard(); }
+    const r = await api({ action: 'saveAbsensi', token: TOKEN, tanggal: tgl, records });
+    if (r.success) { toast('Tersimpan ✅', 'success'); loadDashboard(); }
     else toast(r.message, 'error');
-  } catch(e) { toast(e.message, 'error'); }
+  } catch (e) { toast(e.message, 'error'); }
 }
 
 /* ===== PLAYLIST ===== */
 async function loadSongs() {
   try {
-    const r = await api({ action:'getSongs', token:TOKEN });
+    const r = await api({ action: 'getSongs', token: TOKEN });
     if (!r.success) return toast(r.message, 'error');
     allSongs = r.songs;
     const grid = document.getElementById('songs-grid');
     const empty = document.getElementById('songs-empty');
-    if (!allSongs.length) { grid.innerHTML=''; empty.classList.remove('hidden'); return; }
+    if (!allSongs.length) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
     empty.classList.add('hidden');
     grid.innerHTML = allSongs.map(s => `
       <div class="song-card" data-id="${s.id}" onclick="playSong('${s.id}')">
         <img src="${s.cover_url}" alt="" onerror="this.style.opacity=.3">
         <div class="title">${esc(s.title)}</div>
-        <div class="desc">${esc(s.description||'')}</div>
-        ${USER.role==='admin' ? `<button class="del-btn" onclick="event.stopPropagation();deleteSong('${s.id}')">✕</button>` : ''}
-      </div>
-    `).join('');
-  } catch(e) { toast(e.message, 'error'); }
+        <div class="desc">${esc(s.description || '')} · ▶ ${s.play_count || 0}</div>
+        ${USER.role === 'admin' ? `<button class="del-btn" onclick="event.stopPropagation();deleteSong('${s.id}')">✕</button>` : ''}
+      </div>`).join('');
+  } catch (e) { toast(e.message, 'error'); }
 }
 
-function playSong(id) {
-  const song = allSongs.find(s => s.id === id);
-  if (!song) return;
-  currentSong = song;
-  document.querySelectorAll('.song-card').forEach(c => c.classList.remove('playing'));
-  document.querySelector(`.song-card[data-id="${id}"]`)?.classList.add('playing');
-  document.getElementById('player').classList.remove('hidden');
-  document.getElementById('pl-cover').src = song.cover_url;
-  document.getElementById('pl-title').textContent = song.title;
-  document.getElementById('pl-desc').textContent = song.description || '';
-  const audio = document.getElementById('audio');
-  audio.src = song.file_url; audio.play();
-  document.getElementById('pl-play').textContent = '⏸';
+function playHero() { if (heroSong) playSong(heroSong.id); }
+
+async function playSong(id) {
+  const song = allSongs.find(s => s.id === id) || heroSong;
+  if (!song) return toast('Lagu tidak ditemukan', 'error');
+
+  toast('Memuat audio...', 'info');
+  try {
+    const r = await apiGet({ action: 'stream', id: song.id });
+    if (!r.success) return toast('Gagal memuat audio: ' + (r.message || ''), 'error');
+
+    // Decode base64 → Blob URL
+    const bytes = atob(r.base64);
+    const arr = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+    const blob = new Blob([arr], { type: r.mime || 'audio/mpeg' });
+    if (currentObjectURL) URL.revokeObjectURL(currentObjectURL);
+    currentObjectURL = URL.createObjectURL(blob);
+
+    currentSong = song;
+    document.querySelectorAll('.song-card').forEach(c => c.classList.remove('playing'));
+    document.querySelector(`.song-card[data-id="${id}"]`)?.classList.add('playing');
+
+    const player = document.getElementById('player');
+    player.classList.remove('hidden');
+    document.getElementById('pl-cover').src = song.cover_url;
+    document.getElementById('pl-title').textContent = song.title;
+    document.getElementById('pl-desc').textContent = song.description || '';
+
+    const audio = document.getElementById('audio');
+    audio.src = currentObjectURL;
+    audio.load();
+    await audio.play();
+    document.getElementById('pl-play').textContent = '⏸';
+
+    // Catat play ke sheet (PlayLog + counter)
+    api({ action: 'logPlay', token: TOKEN, songId: song.id }).catch(() => {});
+    toast('▶ Memutar: ' + song.title, 'success');
+  } catch (e) {
+    toast('Audio gagal diputar: ' + e.message, 'error');
+  }
 }
 
 function togglePlay() {
   const a = document.getElementById('audio');
-  if (a.paused) { a.play(); document.getElementById('pl-play').textContent='⏸'; }
-  else { a.pause(); document.getElementById('pl-play').textContent='▶'; }
+  if (a.paused) { a.play(); document.getElementById('pl-play').textContent = '⏸'; }
+  else { a.pause(); document.getElementById('pl-play').textContent = '▶'; }
 }
 function onTimeUpdate() {
   const a = document.getElementById('audio');
   document.getElementById('pl-cur').textContent = fmt(a.currentTime);
-  document.getElementById('pl-fill').style.width = (a.currentTime/a.duration*100||0) + '%';
+  document.getElementById('pl-fill').style.width = ((a.currentTime / a.duration) * 100 || 0) + '%';
 }
 function onMeta() { document.getElementById('pl-dur').textContent = fmt(document.getElementById('audio').duration); }
 function onEnded() { document.getElementById('pl-play').textContent = '▶'; }
 function seekBar(e) {
   const a = document.getElementById('audio');
   const r = e.currentTarget.getBoundingClientRect();
-  const p = (e.clientX - r.left) / r.width;
-  a.currentTime = p * a.duration;
+  a.currentTime = ((e.clientX - r.left) / r.width) * a.duration;
 }
-function fmt(s) { s=Math.floor(s||0); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+function fmt(s) { s = Math.floor(s || 0); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
 
 async function submitSong() {
   const coverFile = document.getElementById('song-cover').files[0];
   const title = document.getElementById('song-title').value.trim();
-  const desc = document.getElementById('song-desc').value.trim();
+  const desc  = document.getElementById('song-desc').value.trim();
   const audioFile = document.getElementById('song-file').files[0];
   if (!coverFile || !title || !audioFile) return toast('Cover, judul, file wajib', 'error');
-  if (coverFile.size > MAX_FILE || audioFile.size > MAX_FILE) return toast('File terlalu besar (max 15MB)', 'error');
+  if (coverFile.size > MAX_FILE || audioFile.size > MAX_FILE) return toast('File max 15MB', 'error');
 
   toast('Mengunggah... mohon tunggu', 'info');
   try {
     const coverB64 = await fileToBase64(coverFile);
     const audioB64 = await fileToBase64(audioFile);
     const r = await api({
-      action:'addSong', token:TOKEN, title, description:desc,
+      action: 'addSong', token: TOKEN, title, description: desc,
       coverBase64: coverB64.split(',')[1], coverMime: coverFile.type, coverName: coverFile.name,
       fileBase64: audioB64.split(',')[1], fileMime: audioFile.type, fileName: audioFile.name
     });
-    if (r.success) { toast('Lagu ditambahkan ✅','success'); closeModal('modal-add-song'); loadSongs(); }
+    if (r.success) { toast('Lagu ditambahkan ✅', 'success'); closeModal('modal-add-song'); loadSongs(); }
     else toast(r.message, 'error');
-  } catch(e) { toast(e.message, 'error'); }
+  } catch (e) { toast(e.message, 'error'); }
 }
 
 async function deleteSong(id) {
   if (!confirm('Hapus lagu ini?')) return;
   try {
-    const r = await api({ action:'deleteSong', token:TOKEN, id });
-    if (r.success) { toast('Terhapus','success'); loadSongs(); }
-    else toast(r.message,'error');
-  } catch(e) { toast(e.message,'error'); }
+    const r = await api({ action: 'deleteSong', token: TOKEN, id });
+    if (r.success) { toast('Terhapus', 'success'); loadSongs(); }
+    else toast(r.message, 'error');
+  } catch (e) { toast(e.message, 'error'); }
 }
 
 /* ===== SISWA ===== */
 async function loadSiswa() {
   try {
-    const r = await api({ action:'getSiswa', token:TOKEN });
+    const r = await api({ action: 'getSiswa', token: TOKEN });
     if (!r.success) return toast(r.message, 'error');
     if (!r.siswa.length) {
       document.getElementById('siswa-list').innerHTML = '<p style="color:var(--sec)">Belum ada siswa.</p>';
@@ -754,11 +745,11 @@ async function loadSiswa() {
     document.getElementById('siswa-list').innerHTML = `
       <table><thead><tr><th>NIS</th><th>Nama</th><th>Kelas</th><th>Aksi</th></tr></thead><tbody>
       ${r.siswa.map(s => `<tr>
-        <td>${esc(s.nis||'-')}</td><td>${esc(s.nama)}</td><td>${esc(s.kelas||'-')}</td>
+        <td>${esc(s.nis || '-')}</td><td>${esc(s.nama)}</td><td>${esc(s.kelas || '-')}</td>
         <td><button class="btn-danger btn-sm" onclick="hapusSiswa('${s.id}')">Hapus</button></td>
       </tr>`).join('')}
       </tbody></table>`;
-  } catch(e) { toast(e.message,'error'); }
+  } catch (e) { toast(e.message, 'error'); }
 }
 async function submitSiswa() {
   const data = {
@@ -767,38 +758,39 @@ async function submitSiswa() {
     kelas: document.getElementById('sw-kelas').value
   };
   try {
-    const r = await api({ action:'addSiswa', token:TOKEN, data });
+    const r = await api({ action: 'addSiswa', token: TOKEN, data });
     if (r.success) {
-      toast('Siswa ditambahkan','success'); closeModal('modal-add-siswa');
-      document.getElementById('sw-nis').value=''; document.getElementById('sw-nama').value=''; document.getElementById('sw-kelas').value='';
+      toast('Siswa ditambahkan', 'success'); closeModal('modal-add-siswa');
+      ['sw-nis','sw-nama','sw-kelas'].forEach(id => document.getElementById(id).value = '');
       loadSiswa();
-    } else toast(r.message,'error');
-  } catch(e) { toast(e.message,'error'); }
+    } else toast(r.message, 'error');
+  } catch (e) { toast(e.message, 'error'); }
 }
 async function hapusSiswa(id) {
   if (!confirm('Hapus siswa ini?')) return;
   try {
-    const r = await api({ action:'deleteSiswa', token:TOKEN, id });
-    if (r.success) { toast('Terhapus','success'); loadSiswa(); }
-    else toast(r.message,'error');
-  } catch(e) { toast(e.message,'error'); }
+    const r = await api({ action: 'deleteSiswa', token: TOKEN, id });
+    if (r.success) { toast('Terhapus', 'success'); loadSiswa(); }
+    else toast(r.message, 'error');
+  } catch (e) { toast(e.message, 'error'); }
 }
 
 /* ===== AKUN ===== */
 async function loadAkun() {
   try {
-    const r = await api({ action:'getAccounts', token:TOKEN });
-    if (!r.success) return toast(r.message,'error');
+    const r = await api({ action: 'getAccounts', token: TOKEN });
+    if (!r.success) return toast(r.message, 'error');
     document.getElementById('akun-list').innerHTML = `
       <table><thead><tr><th>Username</th><th>Nama</th><th>Password</th><th>Role</th><th>Aksi</th></tr></thead><tbody>
       ${r.accounts.map(a => `<tr>
-        <td>${esc(a.username)}</td><td>${esc(a.nama||'-')}</td>
+        <td>${esc(a.username)}</td><td>${esc(a.nama || '-')}</td>
         <td><code style="color:var(--warning)">${esc(a.password)}</code></td>
         <td><span class="badge ${a.role}">${esc(a.role)}</span></td>
-        <td>${a.username.toLowerCase()!=='admin' ? `<button class="btn-danger btn-sm" onclick="hapusAkun('${esc(a.username)}')">Hapus</button>` : '-'}</td>
+        <td>${a.username.toLowerCase() !== 'admin' ?
+          `<button class="btn-danger btn-sm" onclick="hapusAkun('${esc(a.username)}')">Hapus</button>` : '-'}</td>
       </tr>`).join('')}
       </tbody></table>`;
-  } catch(e) { toast(e.message,'error'); }
+  } catch (e) { toast(e.message, 'error'); }
 }
 async function submitAkun() {
   const data = {
@@ -807,23 +799,23 @@ async function submitAkun() {
     nama: document.getElementById('ak-nama').value,
     role: document.getElementById('ak-role').value
   };
-  if (!data.username || !data.password) return toast('Username & password wajib','error');
+  if (!data.username || !data.password) return toast('Username & password wajib', 'error');
   try {
-    const r = await api({ action:'addAccount', token:TOKEN, data });
+    const r = await api({ action: 'addAccount', token: TOKEN, data });
     if (r.success) {
-      toast('Akun ditambahkan','success'); closeModal('modal-add-akun');
-      ['ak-username','ak-password','ak-nama'].forEach(id => document.getElementById(id).value='');
+      toast('Akun ditambahkan', 'success'); closeModal('modal-add-akun');
+      ['ak-username','ak-password','ak-nama'].forEach(id => document.getElementById(id).value = '');
       loadAkun();
-    } else toast(r.message,'error');
-  } catch(e) { toast(e.message,'error'); }
+    } else toast(r.message, 'error');
+  } catch (e) { toast(e.message, 'error'); }
 }
 async function hapusAkun(username) {
   if (!confirm('Hapus akun "' + username + '"?')) return;
   try {
-    const r = await api({ action:'deleteAccount', token:TOKEN, username });
-    if (r.success) { toast('Terhapus','success'); loadAkun(); }
-    else toast(r.message,'error');
-  } catch(e) { toast(e.message,'error'); }
+    const r = await api({ action: 'deleteAccount', token: TOKEN, username });
+    if (r.success) { toast('Terhapus', 'success'); loadAkun(); }
+    else toast(r.message, 'error');
+  } catch (e) { toast(e.message, 'error'); }
 }
 
 /* ===== PENGATURAN ===== */
@@ -833,24 +825,25 @@ function loadPengaturan() {
   document.getElementById('set-password').value = '';
   const av = document.getElementById('set-avatar');
   if (USER.foto_url) av.innerHTML = `<img src="${USER.foto_url}" style="width:100%;height:100%;object-fit:cover">`;
-  else av.textContent = (USER.nama||'?')[0].toUpperCase();
+  else av.textContent = (USER.nama || '?')[0].toUpperCase();
 }
 
 async function uploadPhoto(input) {
   const f = input.files[0];
   if (!f) return;
-  if (f.size > 5 * 1024 * 1024) return toast('Max 5MB','error');
+  if (f.size > 5 * 1024 * 1024) return toast('Max 5MB', 'error');
   try {
     const b64 = await fileToBase64(f);
-    const r = await api({ action:'uploadProfilePhoto', token:TOKEN, base64:b64.split(',')[1], mime:f.type });
-    if (!r.success) return toast(r.message,'error');
-    const r2 = await api({ action:'updateOwnProfile', token:TOKEN, data:{ foto_url: r.url }});
+    const r = await api({ action: 'uploadProfilePhoto', token: TOKEN, base64: b64.split(',')[1], mime: f.type });
+    if (!r.success) return toast(r.message, 'error');
+    const r2 = await api({ action: 'updateOwnProfile', token: TOKEN, data: { foto_url: r.url } });
     if (r2.success) {
       USER = r2.user; sessionStorage.setItem('user', JSON.stringify(USER));
-      toast('Foto diupdate','success'); loadPengaturan();
-      document.getElementById('mini-avatar').innerHTML = `<img src="${USER.foto_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+      toast('Foto diupdate', 'success'); loadPengaturan();
+      document.getElementById('mini-avatar').innerHTML =
+        `<img src="${USER.foto_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
     }
-  } catch(e) { toast(e.message,'error'); }
+  } catch (e) { toast(e.message, 'error'); }
 }
 
 async function saveProfile() {
@@ -859,40 +852,21 @@ async function saveProfile() {
     username: document.getElementById('set-username').value.trim(),
     password: document.getElementById('set-password').value
   };
-  if (!data.username) return toast('Username wajib','error');
+  if (!data.username) return toast('Username wajib', 'error');
   try {
-    const r = await api({ action:'updateOwnProfile', token:TOKEN, data });
+    const r = await api({ action: 'updateOwnProfile', token: TOKEN, data });
     if (r.success) {
       USER = r.user; sessionStorage.setItem('user', JSON.stringify(USER));
-      toast('Profil tersimpan ✅','success');
+      toast('Profil tersimpan ✅', 'success');
       document.getElementById('mini-name').textContent = USER.nama;
       document.getElementById('set-password').value = '';
-    } else toast(r.message,'error');
-  } catch(e) { toast(e.message,'error'); }
-}
-
-/* ===== PAPAN NAMA ===== */
-async function loadPapan() {
-  try {
-    const r = await api({ action:'getPapanNama', token:TOKEN });
-    if (!r.success) return toast(r.message,'error');
-    document.getElementById('papan-grid').innerHTML = r.users.map(u => {
-      const initial = (u.nama||'?')[0].toUpperCase();
-      const img = u.foto_url ? `<img src="${u.foto_url}" onerror="this.outerHTML='${initial}'">` : initial;
-      return `<div class="papan-card">
-        <div class="photo">${img}</div>
-        <div class="name">${esc(u.nama)}</div>
-        <div class="uname">@${esc(u.username)}</div>
-        <span class="badge ${u.role}">${esc(u.role)}</span>
-      </div>`;
-    }).join('');
-  } catch(e) { toast(e.message,'error'); }
+    } else toast(r.message, 'error');
+  } catch (e) { toast(e.message, 'error'); }
 }
 
 /* ===== UTIL ===== */
-function openModal(id)   { document.getElementById(id).classList.remove('hidden'); }
-function closeModal(id)  { document.getElementById(id).classList.add('hidden'); }
-function esc(s) { return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function openModal(id)  { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 function fileToBase64(file) {
   return new Promise((res, rej) => {
     const reader = new FileReader();
@@ -903,17 +877,15 @@ function fileToBase64(file) {
 }
 
 /* ===== RESTORE SESSION ===== */
-(async function() {
+(async function () {
   const t = sessionStorage.getItem('token');
   const u = sessionStorage.getItem('user');
   if (t && u) {
     try {
-      const r = await api({ action:'checkSession', token:t });
-      if (r.success) {
-        TOKEN = t; USER = r.user;
-        enterApp();
-      } else sessionStorage.clear();
-    } catch(_) {}
+      const r = await api({ action: 'checkSession', token: t });
+      if (r.success) { TOKEN = t; USER = r.user; enterApp(); }
+      else sessionStorage.clear();
+    } catch (_) {}
   }
 })();
 </script>
