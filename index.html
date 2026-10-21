@@ -2,694 +2,581 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SMAN 6 Cirebon - Sistem Absensi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Sistem Informasi Sekolah</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
+  /* CSS PROFESIONAL - TEMA MODERN */
   :root {
-    --primary: #0d6efd; --primary-dark: #0a58ca; --bg: #f8f9fa;
-    --card: #ffffff; --text: #212529; --text-muted: #6c757d;
-    --border: #dee2e6; --success: #198754; --danger: #dc3545;
-    --warning: #ffc107; --info: #0dcaf0;
+    --primary: #2563EB; --primary-hover: #1D4ED8; --bg: #F3F4F6;
+    --sidebar-bg: #111827; --sidebar-text: #9CA3AF; --sidebar-active: #F3F4F6;
+    --card: #FFFFFF; --text: #111827; --text-sec: #6B7280;
+    --danger: #EF4444; --success: #10B981; --warning: #F59E0B; --border: #E5E7EB;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  body { background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
   .hidden { display: none !important; }
 
-  /* HEADER */
-  header { background: var(--primary); color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .header-left h1 { font-size: 20px; font-weight: 800; letter-spacing: 1px; line-height: 1.2; }
-  .header-left p { font-size: 12px; opacity: 0.8; }
-  .header-right { display: flex; gap: 16px; font-size: 20px; cursor: pointer; }
+  /* SIDEBAR */
+  .sidebar { width: 260px; background: var(--sidebar-bg); color: var(--sidebar-text); display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 100; }
+  .brand { padding: 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .brand img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: #374151; }
+  .brand h1 { color: #fff; font-size: 16px; font-weight: 700; line-height: 1.2; }
+  .brand p { font-size: 11px; color: var(--sidebar-text); margin-top: 2px; }
+  .nav-menu { flex: 1; padding: 16px 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; text-decoration: none; color: var(--sidebar-text); }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  .nav-item.active { background: var(--primary); color: #fff; }
+  .user-panel { padding: 16px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .user-info img, .user-info .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; object-fit: cover; }
+  .user-info .det h4 { color: #fff; font-size: 13px; }
+  .user-info .det p { font-size: 11px; text-transform: uppercase; color: var(--primary); font-weight: 700; }
+  .btn-logout { width: 100%; padding: 10px; background: rgba(239,68,68,0.1); color: var(--danger); border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+  .btn-logout:hover { background: rgba(239,68,68,0.2); }
 
-  /* MUSIC PLAYER BAR */
-  #global-player { background: #1e1e1e; color: #fff; padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
-  #global-player .cover { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; background: #333; }
-  #global-player .info { flex: 1; min-width: 0; }
-  #global-player .info .t { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #global-player .info .a { font-size: 11px; color: #aaa; }
-  #global-player .progress-wrap { flex: 1; display: flex; align-items: center; gap: 8px; font-size: 11px; color: #aaa; }
-  #global-player .bar { flex: 1; height: 4px; background: #444; border-radius: 2px; cursor: pointer; position: relative; }
-  #global-player .bar .fill { height: 100%; background: var(--primary); border-radius: 2px; width: 0; }
-  #global-player .controls { display: flex; gap: 8px; }
-  #global-player .controls button { background: var(--primary); color: #fff; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  @media (max-width: 600px) { #global-player .progress-wrap { display: none; } }
-
-  /* LAYOUT */
-  .container { padding: 20px; max-width: 1000px; margin: 0 auto; padding-bottom: 80px; }
-  .page-header { margin-bottom: 20px; }
-  .page-header h2 { font-size: 24px; font-weight: 700; }
-  .page-header p { font-size: 14px; color: var(--text-muted); }
-
-  /* STATS GRID */
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-  .stat-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-  .stat-icon.warning { background: var(--warning); }
-  .stat-icon.success { background: var(--success); }
-  .stat-icon.info { background: var(--info); }
-  .stat-info .val { font-size: 24px; font-weight: 800; line-height: 1; }
-  .stat-info .lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-
-  /* BUTTONS */
-  .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-  .btn { padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .btn-primary { background: var(--primary); color: #fff; }
-  .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text); }
-
-  /* CARDS */
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-  .card-header h3 { font-size: 16px; font-weight: 700; }
+  /* MAIN CONTENT */
+  .main { flex: 1; margin-left: 260px; padding: 32px; display: flex; flex-direction: column; gap: 24px; overflow-x: hidden; }
+  .header-mobile { display: none; background: var(--card); padding: 16px; border-bottom: 1px solid var(--border); justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 90; }
   
-  /* CHARTS & NOTES */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
-  .chart-wrap { position: relative; height: 200px; }
-  .note-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-  .note-item:last-child { border: none; }
-  .note-item .icon { color: var(--danger); font-size: 20px; }
-  .note-item .info .name { font-size: 14px; font-weight: 600; }
-  .note-item .info .desc { font-size: 12px; color: var(--text-muted); }
+  /* CARDS & LAYOUT */
+  .page-header { display: flex; justify-content: space-between; align-items: flex-end; }
+  .page-header h2 { font-size: 24px; font-weight: 800; color: var(--text); }
+  .page-header p { font-size: 14px; color: var(--text-sec); margin-top: 4px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+  .stat-card { display: flex; align-items: center; gap: 16px; }
+  .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .stat-info p { font-size: 13px; color: var(--text-sec); font-weight: 600; }
+  .stat-info h3 { font-size: 24px; font-weight: 800; margin-top: 4px; }
 
-  /* LEADERBOARD */
-  .leaderboard-item { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
-  .leaderboard-item:last-child { border: none; }
-  .medal { font-size: 24px; width: 30px; text-align: center; }
-  .avatar-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; }
-  .lb-info .name { font-size: 14px; font-weight: 600; }
-  .lb-info .desc { font-size: 12px; color: var(--text-muted); }
-  .lb-stat { margin-left: auto; text-align: right; font-size: 12px; color: var(--success); font-weight: 600; }
+  /* TABLES & LISTS */
+  .table-wrapper { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+  th { background: #F9FAFB; color: var(--text-sec); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  
+  /* FORMS & BUTTONS */
+  .btn { padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
+  .form-group input:focus { border-color: var(--primary); }
 
-  /* TABLES & MODAL */
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); }
-  th { background: var(--bg); font-weight: 600; }
-  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; }
-  .modal-content { background: #fff; border-radius: 12px; padding: 24px; width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-  .form-group { margin-bottom: 12px; }
-  .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
-  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; }
+  /* MODALS */
+  .modal { position: fixed; inset: 0; background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+  .modal-content { background: var(--card); width: 100%; max-width: 500px; border-radius: 16px; padding: 24px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .modal-header h3 { font-size: 18px; font-weight: 700; }
+  .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-sec); }
 
-  /* NAVIGATION */
-  .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
-  .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--text-muted); cursor: pointer; gap: 4px; }
-  .nav-item.active { color: var(--primary); }
-  .nav-item i { font-size: 18px; }
+  /* MINI PLAYER (BOTTOM) */
+  .player-bar { position: fixed; bottom: 0; left: 260px; right: 0; background: #1F2937; color: #fff; padding: 12px 24px; display: flex; align-items: center; gap: 16px; z-index: 100; }
+  .player-bar img { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; }
+  .player-info h4 { font-size: 14px; font-weight: 600; }
+  .player-info p { font-size: 12px; color: #9CA3AF; }
+  .player-controls { display: flex; gap: 12px; margin-left: auto; align-items: center; }
+  .player-controls button { background: #fff; color: #111827; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  
+  /* LOGIN */
+  #login-view { position: fixed; inset: 0; background: var(--sidebar-bg); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+  .login-card { background: var(--card); padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+  .login-card img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 16px; border-radius: 12px; }
+  .login-card h1 { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+  .login-card p { font-size: 14px; color: var(--text-sec); margin-bottom: 24px; }
 
-  /* TOAST */
-  #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 8px; color: #fff; font-weight: 600; z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-  #toast.show { opacity: 1; }
-  #toast.success { background: var(--success); }
-  #toast.error { background: var(--danger); }
-  #toast.info { background: var(--primary); }
+  @media (max-width: 1024px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; padding: 16px; padding-top: 80px; padding-bottom: 80px; }
+    .header-mobile { display: flex; }
+    .player-bar { left: 0; padding: 12px 16px; }
+    .grid-4 { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-  <div class="header-left">
-    <h1>SMAN 6 CIREBON</h1>
-    <p>Sistem Absensi Siswa</p>
+<!-- LOGIN -->
+<div id="login-view">
+  <div class="login-card">
+    <img id="login-logo" src="logo.png" alt="Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏫</text></svg>'">
+    <h1 id="login-title">Sistem Informasi</h1>
+    <p>Silakan login untuk melanjutkan</p>
+    <div id="login-err" class="badge" style="background:#FEE2E2;color:#EF4444;width:100%;margin-bottom:16px;display:none;">Error</div>
+    <div class="form-group" style="text-align:left"><label>Username</label><input id="in-user" type="text" placeholder="admin"></div>
+    <div class="form-group" style="text-align:left"><label>Password</label><input id="in-pass" type="password" placeholder="••••••••"></div>
+    <button class="btn btn-primary" onclick="doLogin()" style="width:100%">Masuk Sistem</button>
   </div>
-  <div class="header-right">
-    <i class="fas fa-bars" onclick="toggleMenu()"></i>
-    <i class="fas fa-user-circle" onclick="nav('pengaturan')"></i>
-  </div>
-</header>
-
-<!-- MUSIC PLAYER (GLOBAL) -->
-<div id="global-player" class="hidden">
-  <img id="pl-cover" class="cover" src="" alt="">
-  <div class="info">
-    <div class="t" id="pl-title">-</div>
-    <div class="a" id="pl-desc">-</div>
-  </div>
-  <div class="progress-wrap">
-    <span id="pl-cur">0:00</span>
-    <div class="bar" onclick="seekBar(event)"><div class="fill" id="pl-fill"></div></div>
-    <span id="pl-dur">0:00</span>
-  </div>
-  <div class="controls">
-    <button id="pl-play" onclick="togglePlay()"><i class="fas fa-play"></i></button>
-    <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
-  </div>
-  <audio id="audio" ontimeupdate="onTimeUpdate()" onended="nextSong()" onloadedmetadata="onMeta()"></audio>
 </div>
 
-<!-- MAIN CONTAINER -->
-<div class="container">
-
-  <!-- DASHBOARD -->
-  <section id="view-dashboard" class="view">
-    <div class="page-header">
-      <h2>Dashboard</h2>
-      <p id="today-date">Rabu, 21 Oktober 2026</p>
-      <span style="display:inline-block; margin-top:8px; background:#e7f1ff; color:var(--primary); padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600;">Tahun Ajaran Aktif: 2026/2027</span>
-    </div>
-
-    <div class="stats-grid" id="stats-grid">
-      <!-- Diisi via JS -->
-    </div>
-
-    <div class="action-grid">
-      <button class="btn btn-primary" onclick="nav('absensi')"><i class="fas fa-edit"></i> Input Absensi</button>
-      <button class="btn btn-outline" onclick="nav('absensi')"><i class="fas fa-calendar-check"></i> Koreksi Absensi</button>
-    </div>
-
-    <div class="two-col">
-      <div class="card">
-        <div class="card-header"><h3><i class="fas fa-chart-bar" style="color:var(--primary)"></i> Presentasi Kehadiran</h3></div>
-        <div class="chart-wrap"><canvas id="chart-kehadiran"></canvas></div>
+<!-- APP -->
+<div id="app-view" class="hidden" style="display:flex;width:100%;">
+  
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img id="brand-logo" src="" alt="Logo">
+      <div>
+        <h1 id="brand-name">Sekolah</h1>
+        <p>Sistem Terpadu</p>
       </div>
-      <div class="card">
-        <div class="card-header"><h3><i class="fas fa-file-alt"></i> Catatan Pelanggaran</h3></div>
-        <div id="pelanggaran-list">
-          <p style="color:var(--text-muted);font-size:13px;">Belum ada catatan.</p>
+    </div>
+    <nav class="nav-menu" id="nav-menu">
+      <!-- Generated by JS -->
+    </nav>
+    <div class="user-panel">
+      <div class="user-info">
+        <div id="mini-avatar" class="avatar">?</div>
+        <div class="det">
+          <h4 id="mini-name">-</h4>
+          <p id="mini-role">-</p>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Keluar</button>
+    </div>
+  </aside>
+
+  <!-- HEADER MOBILE -->
+  <div class="header-mobile">
+    <h2 style="font-size:16px" id="mobile-title">Dashboard</h2>
+    <button class="close-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main" id="main-content">
+    
+    <!-- DASHBOARD VIEW -->
+    <div id="view-dashboard" class="view">
+      <div class="page-header"><div><h2>Dashboard</h2><p id="today-date">Memuat...</p></div></div>
+      <div class="grid-4">
+        <div class="card stat-card">
+          <div class="stat-icon" style="background:#DBEAFE;color:#2563EB">👥</div>
+          <div class="stat-info"><p>Total Siswa</p><h3 id="st-siswa">0</h3></div>
+        </div>
+        <div class="card stat-card">
+          <div class="stat-icon" style="background:#D1FAE5;color:#10B981">✅</div>
+          <div class="stat-info"><p>Hadir Hari Ini</p><h3 id="st-hadir">0</h3></div>
         </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-header"><h3><i class="fas fa-trophy" style="color:var(--warning)"></i> Papan Peringkat - Top 3 Siswa Tepat Waktu</h3></div>
-      <div id="leaderboard-list">
-        <!-- Diisi via JS -->
+    <!-- PLAYLIST VIEW -->
+    <div id="view-playlist" class="view hidden">
+      <div class="page-header">
+        <div><h2>Playlist Lagu</h2><p>Dengarkan musik sambil belajar</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-song')">+ Tambah Lagu</button>
+      </div>
+      <div id="songs-list" class="grid-4" style="margin-top:24px"></div>
+    </div>
+
+    <!-- ROLE MODULE VIEW (GENERIK) -->
+    <div id="view-module" class="view hidden">
+      <div class="page-header">
+        <div><h2 id="mod-title">Modul</h2><p id="mod-desc">Fitur khusus role</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-module')">+ Tambah Data</button>
+      </div>
+      <div class="card" style="margin-top:24px">
+        <div class="table-wrapper" id="module-list"></div>
       </div>
     </div>
 
-    <!-- PAPAN NAMA (Bukan fitur terpisah, tapi tampilan di dashboard) -->
-    <div class="card">
-      <div class="card-header"><h3><i class="fas fa-id-badge"></i> Papan Nama Pengguna</h3></div>
-      <div id="papan-nama" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:12px;">
-        <!-- Diisi via JS -->
+    <!-- DATA SISWA VIEW -->
+    <div id="view-siswa" class="view hidden">
+      <div class="page-header"><div><h2>Data Siswa</h2><p>Manajemen siswa</p></div><button class="btn btn-primary" onclick="openModal('modal-siswa')">+ Siswa</button></div>
+      <div class="card" style="margin-top:24px"><div class="table-wrapper" id="siswa-list"></div></div>
+    </div>
+
+    <!-- ABSENSI VIEW -->
+    <div id="view-absensi" class="view hidden">
+      <div class="page-header"><div><h2>Input Absensi</h2><p>Rekap kehadiran</p></div><button class="btn btn-primary" onclick="saveAbsensi()">Simpan Absensi</button></div>
+      <div class="card" style="margin-top:24px">
+        <div class="form-group" style="max-width:200px"><label>Pilih Tanggal</label><input type="date" id="absen-tgl" onchange="loadAbsensiForm()"></div>
+        <div id="absen-form-wrap"></div>
       </div>
     </div>
-  </section>
 
-  <!-- PLAYLIST -->
-  <section id="view-playlist" class="view hidden">
-    <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
-      <div><h2>Playlist</h2><p>Koleksi lagu</p></div>
-      <button class="btn btn-primary admin-only" style="padding:8px 16px;" onclick="openModal('modal-add-song')">+ Tambah</button>
+    <!-- AKUN VIEW -->
+    <div id="view-akun" class="view hidden">
+      <div class="page-header"><div><h2>Kelola Akun</h2><p>Semua pengguna sistem</p></div><button class="btn btn-primary" onclick="openModal('modal-akun')">+ Akun</button></div>
+      <div class="card" style="margin-top:24px"><div class="table-wrapper" id="akun-list"></div></div>
     </div>
-    <div id="songs-grid" class="stats-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));"></div>
-  </section>
 
-  <!-- SISWA -->
-  <section id="view-siswa" class="view hidden admin-only">
-    <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
-      <div><h2>Data Siswa</h2><p>Kelola siswa</p></div>
-      <button class="btn btn-primary" style="padding:8px 16px;" onclick="openModal('modal-add-siswa')">+ Tambah</button>
-    </div>
-    <div class="card" style="overflow-x:auto;"><div id="siswa-list"></div></div>
-  </section>
-
-  <!-- AKUN -->
-  <section id="view-akun" class="view hidden admin-only">
-    <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
-      <div><h2>Kelola Akun</h2><p>Semua akun login</p></div>
-      <button class="btn btn-primary" style="padding:8px 16px;" onclick="openModal('modal-add-akun')">+ Tambah</button>
-    </div>
-    <div class="card" style="overflow-x:auto;"><div id="akun-list"></div></div>
-  </section>
-
-  <!-- PENGATURAN -->
-  <section id="view-pengaturan" class="view hidden">
-    <div class="page-header"><h2>Pengaturan</h2><p>Profil & akun Anda</p></div>
-    <div class="card">
-      <div style="text-align:center;margin-bottom:20px">
-        <div id="set-avatar" style="width:80px;height:80px;font-size:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;overflow:hidden;font-weight:700"></div>
-        <input type="file" id="set-photo" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
-        <button class="btn btn-outline" style="display:inline-flex;padding:8px 16px;" onclick="document.getElementById('set-photo').click()">Ganti Foto</button>
+    <!-- BRANDING VIEW -->
+    <div id="view-branding" class="view hidden">
+      <div class="page-header"><div><h2>Pengaturan Branding</h2><p>Khusus Administrator</p></div></div>
+      <div class="card" style="max-width:500px;margin-top:24px">
+        <div class="form-group"><label>Nama Instansi / Sekolah</label><input type="text" id="set-brand-name"></div>
+        <div class="form-group"><label>Logo Instansi (PNG/JPG)</label><input type="file" id="set-brand-logo" accept="image/*"></div>
+        <button class="btn btn-primary" onclick="saveBranding()">Simpan Branding</button>
       </div>
-      <div class="form-group"><label>Nama Lengkap</label><input id="set-nama" type="text"></div>
-      <div class="form-group"><label>Username</label><input id="set-username" type="text"></div>
-      <div class="form-group"><label>Password Baru (kosongkan jika tidak diubah)</label><input id="set-password" type="password"></div>
-      <button class="btn btn-primary" onclick="saveProfile()">Simpan Perubahan</button>
-      <button class="btn btn-outline" style="margin-top:10px;color:var(--danger);border-color:var(--danger);width:100%;" onclick="doLogout()">Logout</button>
     </div>
-  </section>
 
-  <!-- ABSENSI PAGE -->
-  <section id="view-absensi" class="view hidden">
-    <div class="page-header"><h2>Input Absensi</h2><p>Pilih tanggal dan atur kehadiran</p></div>
-    <div class="card">
-      <div style="display:flex;gap:10px;margin-bottom:16px;">
-        <input type="date" id="absen-tanggal" style="flex:1;padding:10px;border:1px solid var(--border);border-radius:6px;">
-        <button class="btn btn-primary" style="width:auto;" onclick="loadAbsensiForm()">Muat</button>
+    <!-- PENGATURAN PRIBADI -->
+    <div id="view-pengaturan" class="view hidden">
+      <div class="page-header"><div><h2>Pengaturan Profil</h2><p>Ubah info akun Anda</p></div></div>
+      <div class="card" style="max-width:500px;margin-top:24px">
+        <div class="form-group"><label>Nama Lengkap</label><input type="text" id="set-nama"></div>
+        <div class="form-group"><label>Username</label><input type="text" id="set-username"></div>
+        <div class="form-group"><label>Password Baru (Kosongkan jika tidak diubah)</label><input type="password" id="set-password"></div>
+        <button class="btn btn-primary" onclick="saveProfile()">Simpan Perubahan</button>
       </div>
-      <div id="absen-form-wrap" style="overflow-x:auto;"><p style="color:var(--text-muted);font-size:13px;">Pilih tanggal lalu klik Muat.</p></div>
     </div>
-  </section>
 
+  </main>
 </div>
 
-<!-- NAVIGATION BOTTOM -->
-<div class="nav-bottom">
-  <div class="nav-item active" data-view="dashboard" onclick="nav('dashboard')"><i class="fas fa-home"></i> Home</div>
-  <div class="nav-item" data-view="playlist" onclick="nav('playlist')"><i class="fas fa-music"></i> Playlist</div>
-  <div class="nav-item admin-only" data-view="siswa" onclick="nav('siswa')"><i class="fas fa-users"></i> Siswa</div>
-  <div class="nav-item admin-only" data-view="akun" onclick="nav('akun')"><i class="fas fa-user-cog"></i> Akun</div>
+<!-- MINI PLAYER -->
+<div class="player-bar hidden" id="player-bar">
+  <img id="mp-cover" src="">
+  <div class="player-info"><h4 id="mp-title">-</h4><p id="mp-desc">-</p></div>
+  <div class="player-controls">
+    <span id="mp-time" style="font-size:12px;color:#9CA3AF">0:00</span>
+    <button id="mp-btn" onclick="togglePlay()">▶</button>
+  </div>
 </div>
 
 <!-- MODALS -->
-<div id="modal-add-song" class="modal hidden">
+<!-- Modal Song -->
+<div id="modal-song" class="modal hidden">
   <div class="modal-content">
-    <h2>Tambah Lagu</h2>
-    <div class="form-group"><label>Cover (wajib)</label><input type="file" id="song-cover" accept="image/*"></div>
+    <div class="modal-header"><h3>Tambah Lagu</h3><button class="close-btn" onclick="closeModal('modal-song')">×</button></div>
     <div class="form-group"><label>Judul Lagu</label><input type="text" id="song-title"></div>
-    <div class="form-group"><label>Deskripsi (opsional)</label><textarea id="song-desc"></textarea></div>
-    <div class="form-group"><label>File Lagu (wajib)</label><input type="file" id="song-file" accept="audio/*"></div>
-    <button class="btn btn-primary" onclick="submitSong()">Upload</button>
-    <button class="btn btn-outline" style="margin-top:8px;width:100%" onclick="closeModal('modal-add-song')">Batal</button>
+    <div class="form-group"><label>Deskripsi</label><input type="text" id="song-desc"></div>
+    <div class="form-group"><label>Cover (Gambar)</label><input type="file" id="song-cover" accept="image/*"></div>
+    <div class="form-group"><label>File Audio (MP3)</label><input type="file" id="song-file" accept="audio/*"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="submitSong()">Upload</button>
   </div>
 </div>
 
-<div id="modal-add-siswa" class="modal hidden">
+<!-- Modal Siswa -->
+<div id="modal-siswa" class="modal hidden">
   <div class="modal-content">
-    <h2>Tambah Siswa</h2>
-    <div class="form-group"><label>NIS</label><input id="sw-nis"></div>
-    <div class="form-group"><label>Nama</label><input id="sw-nama"></div>
-    <div class="form-group"><label>Kelas</label><input id="sw-kelas"></div>
-    <button class="btn btn-primary" onclick="submitSiswa()">Simpan</button>
-    <button class="btn btn-outline" style="margin-top:8px;width:100%" onclick="closeModal('modal-add-siswa')">Batal</button>
+    <div class="modal-header"><h3>Tambah Siswa</h3><button class="close-btn" onclick="closeModal('modal-siswa')">×</button></div>
+    <div class="form-group"><label>NIS</label><input type="text" id="sw-nis"></div>
+    <div class="form-group"><label>Nama Lengkap</label><input type="text" id="sw-nama"></div>
+    <div class="form-group"><label>Kelas</label><input type="text" id="sw-kelas"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="submitSiswa()">Simpan</button>
   </div>
 </div>
 
-<div id="modal-add-akun" class="modal hidden">
+<!-- Modal Akun -->
+<div id="modal-akun" class="modal hidden">
   <div class="modal-content">
-    <h2>Tambah Akun</h2>
-    <div class="form-group"><label>Username</label><input id="ak-username"></div>
-    <div class="form-group"><label>Password</label><input id="ak-password"></div>
-    <div class="form-group"><label>Nama</label><input id="ak-nama"></div>
-    <div class="form-group"><label>Role</label><select id="ak-role"><option value="siswa">Siswa</option><option value="admin">Admin</option></select></div>
-    <button class="btn btn-primary" onclick="submitAkun()">Simpan</button>
-    <button class="btn btn-outline" style="margin-top:8px;width:100%" onclick="closeModal('modal-add-akun')">Batal</button>
+    <div class="modal-header"><h3>Tambah Akun</h3><button class="close-btn" onclick="closeModal('modal-akun')">×</button></div>
+    <div class="form-group"><label>Username</label><input type="text" id="ak-user"></div>
+    <div class="form-group"><label>Password</label><input type="text" id="ak-pass"></div>
+    <div class="form-group"><label>Nama Lengkap</label><input type="text" id="ak-nama"></div>
+    <div class="form-group"><label>Role / Jabatan</label>
+      <select id="ak-role">
+        <option value="admin">Administrator</option>
+        <option value="walikelas">Wali Kelas</option>
+        <option value="km">Ketua Murid (KM)</option>
+        <option value="wkm">Wakil Ketua Murid (WKM)</option>
+        <option value="bendahara">Bendahara</option>
+        <option value="sekertaris">Sekertaris</option>
+        <option value="kebersihan">Kebersihan</option>
+        <option value="keamanan">Keamanan</option>
+        <option value="pengabsen">Pengabsen</option>
+        <option value="siswa">Siswa</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="submitAkun()">Simpan</button>
   </div>
 </div>
 
-<div id="toast"></div>
+<!-- Modal Module Custom -->
+<div id="modal-module" class="modal hidden">
+  <div class="modal-content">
+    <div class="modal-header"><h3 id="mm-title">Tambah Data</h3><button class="close-btn" onclick="closeModal('modal-module')">×</button></div>
+    <div class="form-group"><label>Judul / Catatan Utama</label><input type="text" id="mm-title-input"></div>
+    <div class="form-group"><label>Keterangan / Detail</label><textarea id="mm-content" rows="3"></textarea></div>
+    <div class="form-group"><label>Nominal (Khusus Bendahara)</label><input type="number" id="mm-amount" placeholder="0"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="submitModule()">Simpan Data</button>
+  </div>
+</div>
 
 <script>
-/* ====== URL WEB APP ANDA ====== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbwNypd1fKclaMONch3EdtCXKDPJeQwrm29ZzN42KuDLQ9V5xMjObRpA3ExEUt52WhTj_Q/exec';
-const MAX_FILE = 15 * 1024 * 1024;
+let TOKEN = null, USER = null, BRANDING = { name: 'Sekolah', logo: '' }, AUDIO = new Audio();
+let CHART = null, CURRENT_MODULE_TYPE = '';
 
-let TOKEN = null, USER = null;
-let currentSong = null, songQueue = [], currentIndex = -1;
-let currentObjectURL = null;
-
-/* ===== API ===== */
+/* === API HELPER === */
 async function api(payload) {
-  const res = await fetch(API_URL, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
-  return res.json();
-}
-async function apiGet(params) {
-  const res = await fetch(API_URL + '?' + new URLSearchParams(params).toString(), { method: 'GET' });
+  const res = await fetch(API_URL, { method:'POST', redirect:'follow', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload) });
   return res.json();
 }
 
-/* ===== TOAST & UTILS ===== */
-function toast(msg, type) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'show ' + (type || 'info');
-  clearTimeout(t._t); t._t = setTimeout(() => t.className = '', 3000);
+/* === INIT & LOGIN === */
+async function fetchBranding() {
+  const r = await api({ action: 'getBranding' });
+  if (r.success) {
+    BRANDING.name = r.appName || 'Sekolah';
+    BRANDING.logo = r.appLogo || '';
+    document.getElementById('login-title').textContent = BRANDING.name;
+    document.getElementById('brand-name').textContent = BRANDING.name;
+    if (BRANDING.logo) {
+      document.getElementById('login-logo').src = BRANDING.logo;
+      document.getElementById('brand-logo').src = BRANDING.logo;
+    }
+    document.title = BRANDING.name + ' - Sistem Informasi';
+  }
 }
-function esc(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function fileToBase64(file) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); }); }
-function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-function toggleMenu() { toast('Gunakan menu navigasi di bawah', 'info'); }
 
-/* ===== LOGIN ===== */
 async function doLogin() {
-  const u = document.getElementById('login-username').value.trim();
-  const p = document.getElementById('login-password').value;
-  if (!u || !p) return toast('Isi username & password', 'error');
-  
-  try {
-    const r = await api({ action: 'login', username: u, password: p });
-    if (r.success) {
-      TOKEN = r.token; USER = r.user;
-      sessionStorage.setItem('token', r.token);
-      sessionStorage.setItem('user', JSON.stringify(r.user));
-      enterApp();
-    } else toast(r.message, 'error');
-  } catch (e) { toast('Koneksi gagal', 'error'); }
+  const u = document.getElementById('in-user').value;
+  const p = document.getElementById('in-pass').value;
+  const err = document.getElementById('login-err');
+  err.style.display = 'none';
+  if (!u || !p) { err.textContent = 'Isi username & password'; err.style.display = 'block'; return; }
+  const r = await api({ action:'login', username:u, password:p });
+  if (r.success) {
+    TOKEN = r.token; USER = r.user;
+    sessionStorage.setItem('token', r.token); sessionStorage.setItem('user', JSON.stringify(r.user));
+    enterApp();
+  } else { err.textContent = r.message; err.style.display = 'block'; }
 }
-document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
 function enterApp() {
-  document.getElementById('login-view')?.classList.add('hidden');
-  document.getElementById('app-view')?.classList.remove('hidden');
+  document.getElementById('login-view').classList.add('hidden');
+  document.getElementById('app-view').classList.remove('hidden');
+  document.getElementById('mini-name').textContent = USER.nama;
+  document.getElementById('mini-role').textContent = USER.role;
   
-  document.querySelectorAll('.admin-only').forEach(el => {
-    el.style.display = USER.role === 'admin' ? '' : 'none';
-  });
+  const av = document.getElementById('mini-avatar');
+  if (USER.foto_url) av.innerHTML = `<img src="${USER.foto_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
+  else av.textContent = USER.nama.charAt(0).toUpperCase();
+
+  buildSidebar();
   nav('dashboard');
 }
 
 function doLogout() {
-  if (TOKEN) api({ action: 'logout', token: TOKEN }).catch(() => {});
-  TOKEN = null; USER = null;
-  sessionStorage.clear();
-  location.reload();
+  if (TOKEN) api({ action:'logout', token:TOKEN });
+  sessionStorage.clear(); location.reload();
 }
 
-/* ===== NAVIGATION ===== */
+/* === DYNAMIC SIDEBAR BERDASARKAN ROLE === */
+function buildSidebar() {
+  const menus = [
+    { id: 'dashboard', label: 'Dashboard', icon: '📊', roles: ['admin', 'walikelas', 'km', 'wkm', 'bendahara', 'sekertaris', 'kebersihan', 'keamanan', 'pengabsen'] },
+    { id: 'playlist', label: 'Playlist Lagu', icon: '🎵', roles: ['admin','walikelas','km','wkm','bendahara','sekertaris','kebersihan','keamanan','pengabsen','siswa'] },
+    { id: 'module', label: 'Modul Khusus', icon: '⭐', roles: ['km', 'wkm', 'bendahara', 'sekertaris', 'kebersihan', 'keamanan'] }, // Generic
+    { id: 'siswa', label: 'Data Siswa', icon: '👥', roles: ['admin', 'walikelas', 'sekertaris'] },
+    { id: 'absensi', label: 'Input Absensi', icon: '📝', roles: ['admin', 'walikelas', 'pengabsen'] },
+    { id: 'akun', label: 'Kelola Akun', icon: '🔐', roles: ['admin'] },
+    { id: 'branding', label: 'Branding Instansi', icon: '🏫', roles: ['admin'] },
+    { id: 'pengaturan', label: 'Pengaturan Profil', icon: '⚙️', roles: ['admin','walikelas','km','wkm','bendahara','sekertaris','kebersihan','keamanan','pengabsen','siswa'] }
+  ];
+
+  const nav = document.getElementById('nav-menu');
+  nav.innerHTML = menus.filter(m => m.roles.includes(USER.role)).map(m => 
+    `<a class="nav-item" data-id="${m.id}" onclick="nav('${m.id}')"><span>${m.icon}</span> ${m.label}</a>`
+  ).join('');
+
+  // Modifikasi Label Modul Khusus
+  const modMenu = nav.querySelector('[data-id="module"]');
+  if (modMenu) {
+    const names = { km: 'Pengumuman', wkm: 'Pengumuman', bendahara: 'Kas Bendahara', sekertaris: 'Agenda Surat', kebersihan: 'Jadwal Piket', keamanan: 'Log Keamanan' };
+    modMenu.innerHTML = `<span>📋</span> ${names[USER.role] || 'Modul'}`;
+  }
+}
+
 function nav(view) {
   document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-  document.getElementById('view-' + view)?.classList.remove('hidden');
-  
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.querySelector(`.nav-item[data-view="${view}"]`)?.classList.add('active');
+  
+  const target = document.getElementById('view-' + view);
+  if (target) target.classList.remove('hidden');
+  document.querySelector(`.nav-item[data-id="${view}"]`)?.classList.add('active');
+  document.getElementById('sidebar').classList.remove('open');
 
   if (view === 'dashboard') loadDashboard();
   if (view === 'playlist') loadSongs();
   if (view === 'siswa') loadSiswa();
   if (view === 'akun') loadAkun();
-  if (view === 'pengaturan') loadPengaturan();
+  if (view === 'absensi') { document.getElementById('absen-tgl').value = new Date().toISOString().split('T')[0]; loadAbsensiForm(); }
+  if (view === 'pengaturan') { document.getElementById('set-nama').value = USER.nama; document.getElementById('set-username').value = USER.username; }
+  if (view === 'branding') { document.getElementById('set-brand-name').value = BRANDING.name; }
+  if (view === 'module') loadModule();
 }
 
-/* ===== DASHBOARD ===== */
+/* === DASHBOARD === */
 async function loadDashboard() {
-  const dateOpts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  document.getElementById('today-date').textContent = new Date().toLocaleDateString('id-ID', dateOpts);
+  const r = await api({ action:'getDashboard', token:TOKEN });
+  if (!r.success) return;
+  document.getElementById('st-siswa').textContent = r.stats.totalSiswa;
+  document.getElementById('st-hadir').textContent = r.stats.hadirHariIni;
 
-  try {
-    const r = await api({ action: 'getDashboard', token: TOKEN });
-    if (!r.success) return toast(r.message, 'error');
-
-    // 1. Stats
-    document.getElementById('stats-grid').innerHTML = `
-      <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-info"><div class="val">${r.stats.totalSiswa}</div><div class="lbl">Total Siswa</div></div></div>
-      <div class="stat-card"><div class="stat-icon info"><i class="fas fa-school"></i></div><div class="stat-info"><div class="val">${r.stats.kelasAktif}</div><div class="lbl">Kelas Aktif</div></div></div>
-      <div class="stat-card"><div class="stat-icon warning"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-info"><div class="val">${r.stats.peringatan}</div><div class="lbl">Peringatan</div></div></div>
-      <div class="stat-card"><div class="stat-icon success"><i class="fas fa-check-circle"></i></div><div class="stat-info"><div class="val">${r.stats.hadirHariIni}</div><div class="lbl">Status Hadir</div></div></div>
-    `;
-
-    // 2. Chart
-    const ctx = document.getElementById('chart-kehadiran').getContext('2d');
-    if (window.myChart) window.myChart.destroy();
-    window.myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
-        datasets: [{
-          label: 'Hadir',
-          data: [45, 48, r.stats.hadirHariIni, 47, 49, 49], // Simulasi data mingguan
-          borderColor: '#0d6efd',
-          backgroundColor: 'rgba(13,110,253,0.1)',
-          fill: true,
-          tension: 0.4
-        }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-    });
-
-    // 3. Leaderboard
-    const lb = document.getElementById('leaderboard-list');
-    if (r.leaderboard.length) {
-      lb.innerHTML = r.leaderboard.map((s, i) => {
-        const medals = ['🥇', '🥈', '🥉'];
-        const initials = s.nama.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
-        return `<div class="leaderboard-item">
-          <div class="medal">${medals[i]}</div>
-          <div class="avatar-circle">${initials}</div>
-          <div class="lb-info"><div class="name">${esc(s.nama)} - ${esc(s.kelas)}</div><div class="desc">Hadir ${s.persen}%</div></div>
-          <div class="lb-stat">${s.persen}%</div>
-        </div>`;
-      }).join('');
-    } else {
-      lb.innerHTML = '<p style="font-size:13px;color:var(--text-muted)">Belum ada data.</p>';
-    }
-
-    // 4. Papan Nama
-    const pn = document.getElementById('papan-nama');
-    pn.innerHTML = r.papanNama.map(u => {
-      const initial = (u.nama || '?')[0].toUpperCase();
-      const img = u.foto_url ? `<img src="${u.foto_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : initial;
-      return `<div style="text-align:center;">
-        <div style="width:60px;height:60px;border-radius:50%;background:#e7f1ff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;margin:0 auto 8px;overflow:hidden;">${img}</div>
-        <div style="font-size:12px;font-weight:600;">${esc(u.nama)}</div>
-        <div style="font-size:10px;color:var(--text-muted)">@${esc(u.username)}</div>
-      </div>`;
-    }).join('');
-
-    // 5. Music Player (Banner)
-    if (r.featuredSong) {
-      songQueue = r.allSongs;
-      document.getElementById('global-player').classList.remove('hidden');
-      // Jangan autoplay, tapi siapkan data
-      currentSong = r.featuredSong;
-      document.getElementById('pl-cover').src = currentSong.cover_url;
-      document.getElementById('pl-title').textContent = currentSong.title;
-      document.getElementById('pl-desc').textContent = currentSong.description || '';
-    }
-
-  } catch (e) { toast('Gagal memuat dashboard: ' + e.message, 'error'); }
-}
-
-/* ===== PLAYLIST & AUDIO ===== */
-async function loadSongs() {
-  try {
-    const r = await api({ action: 'getSongs', token: TOKEN });
-    if (!r.success) return toast(r.message, 'error');
-    songQueue = r.songs;
-    const grid = document.getElementById('songs-grid');
-    
-    if (!songQueue.length) {
-      grid.innerHTML = '<p style="color:var(--text-muted);font-size:14px;">Belum ada lagu.</p>';
-      return;
-    }
-
-    grid.innerHTML = songQueue.map((s, i) => `
-      <div class="card" style="cursor:pointer;padding:10px;" onclick="playSong(${i})">
-        <img src="${s.cover_url}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:8px;" onerror="this.src='logo.png'">
-        <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(s.title)}</div>
-        <div style="font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">▶ ${s.play_count} kali</div>
-        ${USER.role === 'admin' ? `<button class="btn btn-outline" style="padding:4px;font-size:11px;margin-top:8px;color:var(--danger);border-color:var(--danger);width:100%;" onclick="event.stopPropagation();deleteSong('${s.id}')">Hapus</button>` : ''}
-      </div>
-    `).join('');
-  } catch (e) { toast(e.message, 'error'); }
-}
-
-async function playSong(index) {
-  if (index < 0 || index >= songQueue.length) return;
-  currentIndex = index;
-  const song = songQueue[index];
-  currentSong = song;
-
-  document.getElementById('global-player').classList.remove('hidden');
-  document.getElementById('pl-cover').src = song.cover_url;
-  document.getElementById('pl-title').textContent = song.title;
-  document.getElementById('pl-desc').textContent = song.description || '';
-  
-  const audio = document.getElementById('audio');
-  document.getElementById('pl-play').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-  
-  try {
-    // Gunakan URL raw langsung karena repo sudah publik
-    audio.src = song.file_url;
-    audio.load();
-    await audio.play();
-    
-    document.getElementById('pl-play').innerHTML = '<i class="fas fa-pause"></i>';
-    api({ action: 'logPlay', token: TOKEN, songId: song.id }).catch(()=>{});
-  } catch (e) {
-    toast('Gagal memutar audio: ' + e.message, 'error');
-    document.getElementById('pl-play').innerHTML = '<i class="fas fa-play"></i>';
+  if (r.featuredSong) {
+    document.getElementById('player-bar').classList.remove('hidden');
+    document.getElementById('mp-cover').src = r.featuredSong.cover_url;
+    document.getElementById('mp-title').textContent = r.featuredSong.title;
+    document.getElementById('mp-desc').textContent = r.featuredSong.description;
+    window.FEATURED_SONG = r.featuredSong;
   }
 }
 
+/* === PLAYLIST === */
+async function loadSongs() {
+  const r = await api({ action:'getSongs', token:TOKEN });
+  document.getElementById('songs-list').innerHTML = r.songs.map(s => `
+    <div class="card" style="cursor:pointer;padding:16px" onclick="playSong('${s.file_url}','${s.title}','${s.id}')">
+      <img src="${s.cover_url}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:12px">
+      <h4 style="font-size:15px;font-weight:700">${s.title}</h4>
+      <p style="font-size:12px;color:var(--text-sec)">${s.description || '-'}</p>
+      <p style="font-size:11px;color:var(--primary);margin-top:8px">▶ ${s.play_count || 0}x · @${s.uploaded_by}</p>
+      ${USER.role==='admin' || USER.username===s.uploaded_by ? `<button class="btn btn-danger" style="margin-top:12px;width:100%;padding:6px" onclick="event.stopPropagation();hapusLagu('${s.id}')">Hapus</button>` : ''}
+    </div>`).join('') || '<p style="grid-column:1/-1;text-align:center;color:var(--text-sec)">Belum ada lagu.</p>';
+}
+
+function playSong(url, title, id) {
+  AUDIO.src = url; AUDIO.play();
+  document.getElementById('player-bar').classList.remove('hidden');
+  document.getElementById('mp-btn').textContent = '⏸';
+  document.getElementById('mp-title').textContent = title;
+  document.getElementById('mp-desc').textContent = 'Sedang Diputar';
+  api({ action:'logPlay', token:TOKEN, songId:id });
+}
 function togglePlay() {
-  const a = document.getElementById('audio');
-  if (a.paused) { a.play(); document.getElementById('pl-play').innerHTML = '<i class="fas fa-pause"></i>'; }
-  else { a.pause(); document.getElementById('pl-play').innerHTML = '<i class="fas fa-play"></i>'; }
+  if (AUDIO.paused) { AUDIO.play(); document.getElementById('mp-btn').textContent = '⏸'; }
+  else { AUDIO.pause(); document.getElementById('mp-btn').textContent = '▶'; }
 }
-function nextSong() {
-  if (songQueue.length === 0) return;
-  currentIndex = (currentIndex + 1) % songQueue.length;
-  playSong(currentIndex);
-}
-function onTimeUpdate() {
-  const a = document.getElementById('audio');
-  document.getElementById('pl-cur').textContent = fmt(a.currentTime);
-  document.getElementById('pl-fill').style.width = ((a.currentTime / a.duration) * 100 || 0) + '%';
-}
-function onMeta() { document.getElementById('pl-dur').textContent = fmt(document.getElementById('audio').duration); }
-function seekBar(e) {
-  const a = document.getElementById('audio');
-  const r = e.currentTarget.getBoundingClientRect();
-  a.currentTime = ((e.clientX - r.left) / r.width) * a.duration;
-}
-function fmt(s) { s = Math.floor(s || 0); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
 
+/* === MODULE (ROLE KHUSUS) === */
+async function loadModule() {
+  const r = await api({ action:'getRoleData', token:TOKEN, type: USER.role });
+  const content = document.getElementById('module-list');
+  if (!r.success) return content.innerHTML = 'Error';
+  
+  document.getElementById('mod-title').textContent = document.querySelector('[data-id="module"]').textContent.trim();
+  document.getElementById('mod-desc').textContent = 'Data khusus untuk role ' + USER.role;
+
+  content.innerHTML = `<table>
+    <thead><tr><th>Tanggal</th><th>Judul</th><th>Detail</th><th>Oleh</th><th>Aksi</th></tr></thead>
+    <tbody>${r.data.map(d => `
+      <tr>
+        <td>${new Date(d.date).toLocaleDateString('id-ID')}</td>
+        <td><b>${d.title}</b></td>
+        <td>${d.content.detail || '-'} ${d.content.amount ? `(Rp ${d.content.amount})` : ''}</td>
+        <td>@${d.created_by}</td>
+        <td><button class="btn btn-danger" style="padding:4px 8px;font-size:12px" onclick="deleteModule('${d.id}')">Hapus</button></td>
+      </tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Belum ada data.</td></tr>'}
+    </tbody>
+  </table>`;
+
+  // Hide amount input if not bendahara
+  document.getElementById('mm-amount').parentElement.style.display = USER.role === 'bendahara' ? 'block' : 'none';
+}
+
+async function submitModule() {
+  const data = {
+    type: USER.role,
+    title: document.getElementById('mm-title-input').value,
+    content: { detail: document.getElementById('mm-content').value, amount: document.getElementById('mm-amount').value }
+  };
+  await api({ action:'addRoleData', token:TOKEN, data });
+  closeModal('modal-module'); loadModule();
+}
+async function deleteModule(id) {
+  if (!confirm('Hapus data ini?')) return;
+  await api({ action:'deleteRoleData', token:TOKEN, id }); loadModule();
+}
+
+/* === ABSENSI === */
+async function loadAbsensiForm() {
+  const tgl = document.getElementById('absen-tgl').value;
+  if(!tgl) return;
+  const [sw, ab] = await Promise.all([api({ action:'getSiswa', token:TOKEN }), api({ action:'getAbsensiHariIni', token:TOKEN, tanggal:tgl })]);
+  const map = {}; ab.records.forEach(r => map[r.siswaId] = r);
+  document.getElementById('absen-form-wrap').innerHTML = `<table>
+    <thead><tr><th>Nama Siswa</th><th>Kelas</th><th>Status</th><th>Ket</th></tr></thead>
+    <tbody>${sw.siswa.map(s => {
+      const cur = map[s.id] || { status:'masuk', keterangan:'' };
+      return `<tr>
+        <td>${s.nama}</td><td>${s.kelas}</td>
+        <td><select class="ab-status" data-sid="${s.id}" style="padding:4px;border-radius:4px;border:1px solid #ccc">
+          ${['masuk','izin','sakit','alpha'].map(x => `<option value="${x}" ${cur.status===x?'selected':''}>${x.toUpperCase()}</option>`).join('')}
+        </select></td>
+        <td><input class="ket" data-sid="${s.id}" value="${cur.keterangan||''}" style="width:100%;padding:4px;border:1px solid #ccc;border-radius:4px"></td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+}
+async function saveAbsensi() {
+  const tgl = document.getElementById('absen-tgl').value;
+  const recs = [...document.querySelectorAll('.ab-status')].map(el => ({
+    siswaId: el.dataset.sid, status: el.value, keterangan: document.querySelector(`.ket[data-sid="${el.dataset.sid}"]`).value
+  }));
+  await api({ action:'saveAbsensi', token:TOKEN, tanggal:tgl, records:recs });
+  alert('Absensi disimpan!');
+}
+
+/* === CRUD LAINNYA === */
 async function submitSong() {
-  const coverFile = document.getElementById('song-cover').files[0];
-  const title = document.getElementById('song-title').value.trim();
-  const desc = document.getElementById('song-desc').value.trim();
-  const audioFile = document.getElementById('song-file').files[0];
-  if (!coverFile || !title || !audioFile) return toast('Cover, judul, file wajib', 'error');
-
-  toast('Mengunggah... mohon tunggu', 'info');
-  try {
-    const coverB64 = await fileToBase64(coverFile);
-    const audioB64 = await fileToBase64(audioFile);
-    const r = await api({
-      action: 'addSong', token: TOKEN, title, description: desc,
-      coverBase64: coverB64.split(',')[1], coverName: coverFile.name,
-      fileBase64: audioB64.split(',')[1], fileName: audioFile.name
-    });
-    if (r.success) { toast('Lagu ditambahkan ✅', 'success'); closeModal('modal-add-song'); loadSongs(); }
-    else toast(r.message, 'error');
-  } catch (e) { toast(e.message, 'error'); }
+  const cFile = document.getElementById('song-cover').files[0];
+  const aFile = document.getElementById('song-file').files[0];
+  if(!cFile || !aFile) return alert('Lengkapi file!');
+  const cB64 = await toB64(cFile), aB64 = await toB64(aFile);
+  const r = await api({ action:'addSong', token:TOKEN, title:document.getElementById('song-title').value, description:document.getElementById('song-desc').value, coverBase64:cB64.split(',')[1], coverName:cFile.name, fileBase64:aB64.split(',')[1], fileName:aFile.name });
+  if(r.success) { closeModal('modal-song'); loadSongs(); } else alert(r.message);
 }
+async function hapusLagu(id) { if(!confirm('Hapus?')) return; await api({ action:'deleteSong', token:TOKEN, id }); loadSongs(); }
 
-async function deleteSong(id) {
-  if (!confirm('Hapus lagu ini?')) return;
-  try {
-    const r = await api({ action: 'deleteSong', token: TOKEN, id });
-    if (r.success) { toast('Terhapus', 'success'); loadSongs(); }
-    else toast(r.message, 'error');
-  } catch (e) { toast(e.message, 'error'); }
-}
-
-/* ===== SISWA ===== */
 async function loadSiswa() {
-  try {
-    const r = await api({ action: 'getSiswa', token: TOKEN });
-    if (!r.success) return toast(r.message, 'error');
-    if (!r.siswa.length) {
-      document.getElementById('siswa-list').innerHTML = '<p style="color:var(--text-muted)">Belum ada siswa.</p>';
-      return;
-    }
-    document.getElementById('siswa-list').innerHTML = `
-      <table><thead><tr><th>NIS</th><th>Nama</th><th>Kelas</th><th>Aksi</th></tr></thead><tbody>
-      ${r.siswa.map(s => `<tr>
-        <td>${esc(s.nis || '-')}</td><td>${esc(s.nama)}</td><td>${esc(s.kelas || '-')}</td>
-        <td><button class="btn btn-outline" style="padding:4px 8px;font-size:11px;color:var(--danger);border-color:var(--danger);" onclick="hapusSiswa('${s.id}')">Hapus</button></td>
-      </tr>`).join('')}
-      </tbody></table>`;
-  } catch (e) { toast(e.message, 'error'); }
+  const r = await api({ action:'getSiswa', token:TOKEN });
+  document.getElementById('siswa-list').innerHTML = `<table><thead><tr><th>NIS</th><th>Nama</th><th>Kelas</th><th>Aksi</th></tr></thead><tbody>${r.siswa.map(s => `<tr><td>${s.nis}</td><td>${s.nama}</td><td>${s.kelas}</td><td><button class="btn btn-danger" style="padding:4px 8px;font-size:12px" onclick="api({action:'deleteSiswa',token:TOKEN,id:'${s.id}'}).then(loadSiswa)">Hapus</button></td></tr>`).join('')}</tbody></table>`;
 }
 async function submitSiswa() {
-  const data = { nis: document.getElementById('sw-nis').value, nama: document.getElementById('sw-nama').value, kelas: document.getElementById('sw-kelas').value };
-  try {
-    const r = await api({ action: 'addSiswa', token: TOKEN, data });
-    if (r.success) {
-      toast('Siswa ditambahkan', 'success'); closeModal('modal-add-siswa');
-      ['sw-nis','sw-nama','sw-kelas'].forEach(id => document.getElementById(id).value = '');
-      loadSiswa();
-    } else toast(r.message, 'error');
-  } catch (e) { toast(e.message, 'error'); }
-}
-async function hapusSiswa(id) {
-  if (!confirm('Hapus siswa ini?')) return;
-  try {
-    const r = await api({ action: 'deleteSiswa', token: TOKEN, id });
-    if (r.success) { toast('Terhapus', 'success'); loadSiswa(); }
-    else toast(r.message, 'error');
-  } catch (e) { toast(e.message, 'error'); }
+  await api({ action:'addSiswa', token:TOKEN, data:{ nis:document.getElementById('sw-nis').value, nama:document.getElementById('sw-nama').value, kelas:document.getElementById('sw-kelas').value }});
+  closeModal('modal-siswa'); loadSiswa();
 }
 
-/* ===== AKUN ===== */
 async function loadAkun() {
-  try {
-    const r = await api({ action: 'getAccounts', token: TOKEN });
-    if (!r.success) return toast(r.message, 'error');
-    document.getElementById('akun-list').innerHTML = `
-      <table><thead><tr><th>Username</th><th>Nama</th><th>Password</th><th>Role</th><th>Aksi</th></tr></thead><tbody>
-      ${r.accounts.map(a => `<tr>
-        <td>${esc(a.username)}</td><td>${esc(a.nama || '-')}</td>
-        <td><code style="color:var(--warning)">${esc(a.password)}</code></td>
-        <td>${esc(a.role)}</td>
-        <td>${a.username.toLowerCase() !== 'admin' ? `<button class="btn btn-outline" style="padding:4px 8px;font-size:11px;color:var(--danger);border-color:var(--danger);" onclick="hapusAkun('${esc(a.username)}')">Hapus</button>` : '-'}</td>
-      </tr>`).join('')}
-      </tbody></table>`;
-  } catch (e) { toast(e.message, 'error'); }
+  const r = await api({ action:'getAccounts', token:TOKEN });
+  document.getElementById('akun-list').innerHTML = `<table><thead><tr><th>User</th><th>Pass</th><th>Nama</th><th>Role</th><th>Aksi</th></tr></thead><tbody>${r.accounts.map(a => `<tr><td>${a.username}</td><td><code style="color:var(--warning)">${a.password}</code></td><td>${a.nama}</td><td><span class="badge" style="background:#DBEAFE;color:#2563EB">${a.role}</span></td><td>${a.username!=='admin'?`<button class="btn btn-danger" style="padding:4px 8px;font-size:12px" onclick="api({action:'deleteAccount',token:TOKEN,username:'${a.username}'}).then(loadAkun)">Hapus</button>`:'-'}</td></tr>`).join('')}</tbody></table>`;
 }
 async function submitAkun() {
-  const data = {
-    username: document.getElementById('ak-username').value.trim(),
-    password: document.getElementById('ak-password').value,
-    nama: document.getElementById('ak-nama').value,
-    role: document.getElementById('ak-role').value
-  };
-  if (!data.username || !data.password) return toast('Username & password wajib', 'error');
-  try {
-    const r = await api({ action: 'addAccount', token: TOKEN, data });
-    if (r.success) {
-      toast('Akun ditambahkan', 'success'); closeModal('modal-add-akun');
-      ['ak-username','ak-password','ak-nama'].forEach(id => document.getElementById(id).value = '');
-      loadAkun();
-    } else toast(r.message, 'error');
-  } catch (e) { toast(e.message, 'error'); }
-}
-async function hapusAkun(username) {
-  if (!confirm('Hapus akun "' + username + '"?')) return;
-  try {
-    const r = await api({ action: 'deleteAccount', token: TOKEN, username });
-    if (r.success) { toast('Terhapus', 'success'); loadAkun(); }
-    else toast(r.message, 'error');
-  } catch (e) { toast(e.message, 'error'); }
+  const r = await api({ action:'addAccount', token:TOKEN, data:{ username:document.getElementById('ak-user').value, password:document.getElementById('ak-pass').value, nama:document.getElementById('ak-nama').value, role:document.getElementById('ak-role').value }});
+  if(r.success) { closeModal('modal-akun'); loadAkun(); } else alert(r.message);
 }
 
-/* ===== PENGATURAN ===== */
-function loadPengaturan() {
-  document.getElementById('set-nama').value = USER.nama || '';
-  document.getElementById('set-username').value = USER.username || '';
-  document.getElementById('set-password').value = '';
-  const av = document.getElementById('set-avatar');
-  if (USER.foto_url) av.innerHTML = `<img src="${USER.foto_url}" style="width:100%;height:100%;object-fit:cover">`;
-  else av.textContent = (USER.nama || '?')[0].toUpperCase();
+/* === BRANDING & PROFIL === */
+async function saveBranding() {
+  const f = document.getElementById('set-brand-logo').files[0];
+  const name = document.getElementById('set-brand-name').value;
+  let b64 = null;
+  if (f) { const raw = await toB64(f); b64 = raw.split(',')[1]; }
+  const r = await api({ action:'updateBranding', token:TOKEN, name, base64: b64 });
+  if(r.success) { alert('Branding berhasil disimpan!'); location.reload(); }
 }
-
-async function uploadPhoto(input) {
-  const f = input.files[0];
-  if (!f) return;
-  if (f.size > 5 * 1024 * 1024) return toast('Max 5MB', 'error');
-  try {
-    const b64 = await fileToBase64(f);
-    const r = await api({ action: 'uploadProfilePhoto', token: TOKEN, base64: b64.split(',')[1], mime: f.type });
-    if (!r.success) return toast(r.message, 'error');
-    const r2 = await api({ action: 'updateOwnProfile', token: TOKEN, data: { foto_url: r.url } });
-    if (r2.success) {
-      USER = r2.user; sessionStorage.setItem('user', JSON.stringify(USER));
-      toast('Foto diupdate', 'success'); loadPengaturan();
-    }
-  } catch (e) { toast(e.message, 'error'); }
-}
-
 async function saveProfile() {
-  const data = {
-    nama: document.getElementById('set-nama').value.trim(),
-    username: document.getElementById('set-username').value.trim(),
-    password: document.getElementById('set-password').value
-  };
-  if (!data.username) return toast('Username wajib', 'error');
-  try {
-    const r = await api({ action: 'updateOwnProfile', token: TOKEN, data });
-    if (r.success) {
-      USER = r.user; sessionStorage.setItem('user', JSON.stringify(USER));
-      toast('Profil tersimpan ✅', 'success');
-      document.getElementById('set-password').value = '';
-    } else toast(r.message, 'error');
-  } catch (e) { toast(e.message, 'error'); }
+  const r = await api({ action:'updateOwnProfile', token:TOKEN, data:{ nama:document.getElementById('set-nama').value, username:document.getElementById('set-username').value, password:document.getElementById('set-password').value }});
+  if (r.success) { alert('Profil disimpan!'); USER = r.user; sessionStorage.setItem('user', JSON.stringify(USER)); location.reload(); }
+  else alert(r.message);
 }
 
-/* ===== RESTORE SESSION ===== */
-(async function () {
-  const t = sessionStorage.getItem('token');
-  const u = sessionStorage.getItem('user');
+/* === UTILS === */
+function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+function toB64(file) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); }); }
+
+AUDIO.ontimeupdate = () => { document.getElementById('mp-time').textContent = fmt(AUDIO.currentTime); };
+function fmt(s) { s=Math.floor(s||0); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+
+/* === START === */
+(async function() {
+  await fetchBranding();
+  const t = sessionStorage.getItem('token'), u = sessionStorage.getItem('user');
   if (t && u) {
-    try {
-      const r = await api({ action: 'checkSession', token: t });
-      if (r.success) { TOKEN = t; USER = r.user; enterApp(); }
-      else sessionStorage.clear();
-    } catch (_) {}
+    const r = await api({ action:'checkSession', token:t });
+    if (r.success) { TOKEN = t; USER = r.user; enterApp(); }
+    else sessionStorage.clear();
   }
 })();
 </script>
